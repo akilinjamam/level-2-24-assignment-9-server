@@ -6,7 +6,7 @@ const createBorrow = tryCatchAsync(async (req, res) => {
 
   res.status(201).json({
     success: true,
-    status: 201,
+    status: 200,
     message: "Book borrowed successfully",
     data: result,
   });
