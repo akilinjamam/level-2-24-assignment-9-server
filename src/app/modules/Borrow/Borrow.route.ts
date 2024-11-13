@@ -11,4 +11,6 @@ router.post(
   borrowController.createBorrow
 );
 
+router.get("/overdue", borrowController.getOverDueBorrowedBooks);
+
 export const borrowRouter = router;
