@@ -8,8 +8,8 @@ export const globalErrorHandler = (
   next: NextFunction
 ) => {
   res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-    success: true,
+    success: false,
+    status: httpStatus.INTERNAL_SERVER_ERROR,
     message: err.message,
-    error: err,
   });
 };

@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 const createReturn = async (data: TReturn) => {
   const { borrowId } = data;
 
-  const findBorrowId = await prisma.borrowRecord.findUnique({
+  const findBorrowId = await prisma.borrowRecord.findUniqueOrThrow({
     where: {
       borrowId,
     },
