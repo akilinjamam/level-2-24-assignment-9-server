@@ -10,6 +10,6 @@ export const globalErrorHandler = (
   res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
     success: false,
     status: httpStatus.INTERNAL_SERVER_ERROR,
-    message: err.message,
+    message: err.name,
   });
 };
