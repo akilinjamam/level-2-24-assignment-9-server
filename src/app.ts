@@ -13,9 +13,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Library Management System server...");
 });
 
-routes.map((item) => {
-  return app.use(`/api/${item.path}`, item.routes);
-});
+app.use("/api/", routes);
 
 app.use(globalErrorHandler);
 
