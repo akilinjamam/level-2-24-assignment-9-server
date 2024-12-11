@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Library Management System server...");
+  res.send("level-2-24-assignment-9 server...");
 });
 
 routes.map((item) => {

@@ -15,39 +15,56 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Book {
-  bookId          String         @id @default(uuid()) @db.Uuid
-  title           String
-  genre           String
-  publishedYear   Int
-  totalCopies     Int
-  availableCopies Int
-  BorrowRecord    BorrowRecord[]
+model Vendor {
+  vendorId   String    @id @default(uuid()) @db.Uuid
+  vendorName String
+  shopName   String
+  details    String
+  logo       String
+  product    Products?
+  follows    Follow[]
 
-  @@map("books")
+  @@map("vendors")
 }
 
-model Member {
-  memberId       String         @id @default(uuid()) @db.Uuid
-  name           String
-  email          String         @unique
-  phone          String
-  membershipDate DateTime
-  BorrowRecord   BorrowRecord[]
+model Products {
+  productId   String   @id @default(uuid()) @db.Uuid
+  productName String
+  category    String
+  price       Int
+  ratings     Int
+  details     String
+  clicked     Int
+  images      String[]
+  vendorId    String   @unique @db.Uuid
+  vendor      Vendor   @relation(fields: [vendorId], references: [vendorId])
 
-  @@map("members")
+  @@map("products")
 }
 
-model BorrowRecord {
-  borrowId   String    @id @default(uuid()) @db.Uuid
-  borrowDate DateTime
-  returnDate DateTime?
+model User {
+  userId      String   @id @default(uuid()) @db.Uuid
+  userName    String
+  email       String
+  phoneNumber Int
+  userType    UserType
+  follows     Follow[]
 
-  bookId   String @db.Uuid
-  memberId String @db.Uuid
+  @@map("users")
+}
 
-  book   Book   @relation(fields: [bookId], references: [bookId])
-  member Member @relation(fields: [memberId], references: [memberId])
+model Follow {
+  followId String @id @default(uuid()) @db.Uuid
+  vendorId String @db.Uuid
+  userId   String @db.Uuid
+  vendor   Vendor @relation(fields: [vendorId], references: [vendorId])
+  user     User   @relation(fields: [userId], references: [userId])
 
-  @@map("borrow_records")
+  @@unique([vendorId, userId])
+  @@map("follows")
+}
+
+enum UserType {
+  USER
+  VENDOR
 }

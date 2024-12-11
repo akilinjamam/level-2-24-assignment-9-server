@@ -1,24 +1,24 @@
-import { bookRouter } from "../app/modules/Book/Book.route";
-import { borrowRouter } from "../app/modules/Borrow/Borrow.route";
-import { memberRouter } from "../app/modules/Member/member.route";
-import { returnRouter } from "../app/modules/Return/return.route";
+import { followRouter } from "../app/modules/follow/follows.route";
+import { productRouter } from "../app/modules/products/products.route";
+import { userRouter } from "../app/modules/user/user.route";
+import { vendorRouter } from "../app/modules/vendor/vendor.route";
 
 const routes = [
   {
-    path: "books",
-    routes: bookRouter,
+    path: "products",
+    routes: productRouter,
   },
   {
-    path: "members",
-    routes: memberRouter,
+    path: "vendors",
+    routes: vendorRouter,
   },
   {
-    path: "borrow",
-    routes: borrowRouter,
+    path: "users",
+    routes: userRouter,
   },
   {
-    path: "return",
-    routes: returnRouter,
+    path: "follows",
+    routes: followRouter,
   },
 ];
 
