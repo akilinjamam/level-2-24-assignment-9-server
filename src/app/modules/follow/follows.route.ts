@@ -10,5 +10,6 @@ router.post(
   validateRequest(followSchema.createFollowValidationSchema),
   followController.createFollowController
 );
+router.get("/", followController.getFollowController);
 
 export const followRouter = router;

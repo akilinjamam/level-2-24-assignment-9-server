@@ -16,13 +16,14 @@ datasource db {
 }
 
 model Vendor {
-  vendorId   String    @id @default(uuid()) @db.Uuid
-  vendorName String
-  shopName   String
-  details    String
-  logo       String
-  product    Products?
-  follows    Follow[]
+  vendorId      String     @id @default(uuid()) @db.Uuid
+  vendorName    String
+  shopName      String
+  details       String
+  logo          String
+  followedCount Int        @default(0)
+  product       Products[]
+  follows       Follow[]
 
   @@map("vendors")
 }
@@ -36,7 +37,7 @@ model Products {
   details     String
   clicked     Int
   images      String[]
-  vendorId    String   @unique @db.Uuid
+  vendorId    String   @db.Uuid
   vendor      Vendor   @relation(fields: [vendorId], references: [vendorId])
 
   @@map("products")
@@ -46,7 +47,8 @@ model User {
   userId      String   @id @default(uuid()) @db.Uuid
   userName    String
   email       String
-  phoneNumber Int
+  phoneNumber String
+  address     String
   userType    UserType
   follows     Follow[]
 

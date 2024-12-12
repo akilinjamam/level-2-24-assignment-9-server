@@ -6,14 +6,16 @@ export const createUserValidationSchema = z.object({
       .string()
       .min(1, "User name is required.")
       .max(100, "User name should not exceed 100 characters."),
+    address: z
+      .string()
+      .min(1, "Address is required.")
+      .max(150, "Address should not exceed 100 characters."),
     email: z
       .string()
       .email("Invalid email address.")
       .max(100, "Email should not exceed 100 characters."),
-    phoneNumber: z
-      .number()
-      .int("Phone number must be an integer.")
-      .positive("Phone number must be positive."),
+    phoneNumber: z.string().max(11, "number not exceed 11 characters."),
+
     userType: z.enum(["USER", "VENDOR"]),
   }),
 });

@@ -7,11 +7,22 @@ const createFollowController = tryCatchAsync(async (req, res) => {
   res.status(201).json({
     success: true,
     status: 201,
-    message: "follow created successfully",
+    message: result?.message,
+    data: result?.result,
+  });
+});
+const getFollowController = tryCatchAsync(async (req, res) => {
+  const result = await followService.getFollow();
+
+  res.status(201).json({
+    success: true,
+    status: 201,
+    message: result,
     data: result,
   });
 });
 
 export const followController = {
   createFollowController,
+  getFollowController,
 };

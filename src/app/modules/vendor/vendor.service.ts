@@ -11,7 +11,17 @@ const createVendor = async (data: TVendor) => {
   return result;
 };
 const getAllVendor = async () => {
-  const result = await pirsma.vendor.findMany({ include: { product: true } });
+  const result = await pirsma.vendor.findMany({
+    include: {
+      product: true,
+      follows: {
+        include: {
+          vendor: true,
+          user: true,
+        },
+      },
+    },
+  });
 
   return result;
 };

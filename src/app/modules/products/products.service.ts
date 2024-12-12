@@ -14,6 +14,24 @@ const createProductService = async (data: TProduct) => {
   return result;
 };
 
+const getProductService = async () => {
+  const result = await prisma.products.findMany({
+    include: {
+      vendor: {
+        select: { followedCount: true },
+      },
+    },
+    orderBy: {
+      vendor: {
+        followedCount: "desc",
+      },
+    },
+  });
+
+  return result;
+};
+
 export const productService = {
   createProductService,
+  getProductService,
 };
