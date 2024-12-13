@@ -20,7 +20,15 @@ export const createUserValidationSchema = z.object({
   }),
 });
 
+export const createUserLoginValidationSchema = z.object({
+  body: z.object({
+    email: z.string(),
+    password: z.string(),
+  }),
+});
+
 // Example usage
 export const userSchema = {
   createUserValidationSchema,
+  createUserLoginValidationSchema,
 };

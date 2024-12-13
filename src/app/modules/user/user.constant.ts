@@ -1,6 +1,13 @@
 export type TUser = {
   userName: string;
   email: string;
-  phoneNumber: number;
+  phoneNumber: string;
+  password: string;
+  address: string;
   userType: "USER" | "VENDOR";
+};
+
+export type TLogin = {
+  email: string;
+  password: string;
 };
