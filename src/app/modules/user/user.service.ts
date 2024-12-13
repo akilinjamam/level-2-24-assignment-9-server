@@ -1,7 +1,13 @@
 import { PrismaClient, UserType } from "@prisma/client";
-import { TChangePassword, TLogin, TUser } from "./user.constant";
+import {
+  TChangePassword,
+  TLogin,
+  TRecoveryPassword,
+  TUser,
+} from "./user.constant";
 import { createToken } from "../../../token/createToken";
 import { DecodedToken } from "../../../auth/auth";
+import { sendEmail } from "../../../sendMail/sendMail";
 
 const prisma = new PrismaClient();
 
@@ -31,11 +37,6 @@ const createLogin = async (data: TLogin) => {
   if (findUser?.password !== data.password) {
     throw new Error("password did not matched");
   }
-
-  /* 
-    JWT_ACCESS_SECRET=6d28b4f8aa1ad046ffef1290ca98341ea2d921c68d488755ff6ea7cbedbad5dd
-    JWT_ACCESS_EXPIRES_IN=5d
-  */
 
   const jwt_token = process.env.JWT_ACCESS_SECRET;
   const jwt_expires_id = process.env.JWT_ACCESS_EXPIRES_IN;
@@ -78,8 +79,32 @@ const changePassword = async (data: TChangePassword, getUser: DecodedToken) => {
   return result;
 };
 
+const resetPassword = async (
+  data: TRecoveryPassword,
+  userInfo: DecodedToken
+) => {
+  const { iat, exp, ...remaining } = userInfo as any;
+
+  const jwtPayload = remaining;
+
+  console.log(jwtPayload);
+
+  const resetToken = createToken(
+    jwtPayload,
+    process.env.JWT_ACCESS_SECRET as string,
+    "10m"
+  );
+
+  const htmlUiLink = `https://level-2-24-assignment-9-client.vercel.app/recoveryPassword/user?token=${resetToken}`;
+
+  sendEmail(data.email, htmlUiLink);
+
+  return data;
+};
+
 export const userService = {
   createUser,
   createLogin,
   changePassword,
+  resetPassword,
 };

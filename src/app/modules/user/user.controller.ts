@@ -41,8 +41,26 @@ const changePasswordController = tryCatchAsync(async (req, res) => {
   });
 });
 
+const resetPasswordController = tryCatchAsync(async (req, res) => {
+  const getUser = req.user;
+  console.log(getUser);
+
+  const result = await userService.resetPassword(
+    req.body,
+    getUser as DecodedToken
+  );
+
+  res.status(201).json({
+    success: true,
+    status: 201,
+    message: "Password reset successfully done",
+    data: result,
+  });
+});
+
 export const userController = {
   createUserController,
   createUserLoginController,
   changePasswordController,
+  resetPasswordController,
 };

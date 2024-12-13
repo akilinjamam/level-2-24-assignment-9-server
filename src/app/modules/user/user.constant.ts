@@ -15,3 +15,7 @@ export type TChangePassword = {
   oldPassword: string;
   newPassword: string;
 };
+
+export type TRecoveryPassword = {
+  email: string;
+};
