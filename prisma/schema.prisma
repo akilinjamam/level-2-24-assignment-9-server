@@ -33,12 +33,13 @@ model Products {
   productName String
   category    String
   price       Int
-  ratings     Int
   details     String
   clicked     Int
   images      String[]
   vendorId    String   @db.Uuid
   vendor      Vendor   @relation(fields: [vendorId], references: [vendorId])
+  Rating      Rating[]
+  Review      Review[]
 
   @@map("products")
 }
@@ -64,6 +65,18 @@ model Follow {
 
   @@unique([vendorId, userId])
   @@map("follows")
+}
+
+model Rating {
+  rating    Int
+  productId String   @id @default(uuid()) @db.Uuid
+  product   Products @relation(fields: [productId], references: [productId])
+}
+
+model Review {
+  review    String
+  productId String   @id @default(uuid()) @db.Uuid
+  product   Products @relation(fields: [productId], references: [productId])
 }
 
 enum UserType {

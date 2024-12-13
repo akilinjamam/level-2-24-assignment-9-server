@@ -10,22 +10,38 @@ const createProductService = async (data: TProduct) => {
   const result = await prisma.products.create({
     data: data,
   });
-
   return result;
 };
 
-const getProductService = async () => {
-  const result = await prisma.products.findMany({
-    include: {
-      vendor: {
-        select: { followedCount: true },
+const getProductService = async (
+  category: string,
+  from: string,
+  to: string
+) => {
+  let addFilterCondition = {};
+
+  if (category && !from && !to) {
+    addFilterCondition = {
+      category: category,
+    };
+  }
+
+  if (from && to && !category) {
+    addFilterCondition = {
+      price: {
+        gte: Number(from),
+        lte: Number(to),
       },
-    },
+    };
+  }
+
+  const result = await prisma.products.findMany({
     orderBy: {
       vendor: {
         followedCount: "desc",
       },
     },
+    where: addFilterCondition,
   });
 
   return result;

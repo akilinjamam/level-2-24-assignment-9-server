@@ -12,7 +12,13 @@ const createProduct = tryCatchAsync(async (req, res) => {
   });
 });
 const getProduct = tryCatchAsync(async (req, res) => {
-  const result = await productService.getProductService();
+  const { category, from, to } = req.query;
+
+  const result = await productService.getProductService(
+    category as string,
+    from as string,
+    to as string
+  );
 
   res.status(200).json({
     success: true,
