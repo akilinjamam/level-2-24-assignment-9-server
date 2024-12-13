@@ -1,3 +1,4 @@
+import { DecodedToken } from "../../../auth/auth";
 import { tryCatchAsync } from "../../../shared/tryCatchAsynce";
 import { userService } from "./user.service";
 
@@ -23,7 +24,25 @@ const createUserLoginController = tryCatchAsync(async (req, res) => {
   });
 });
 
+const changePasswordController = tryCatchAsync(async (req, res) => {
+  const getUser = req.user;
+  console.log(getUser);
+
+  const result = await userService.changePassword(
+    req.body,
+    getUser as DecodedToken
+  );
+
+  res.status(201).json({
+    success: true,
+    status: 201,
+    message: "Password changed successfully",
+    data: result,
+  });
+});
+
 export const userController = {
   createUserController,
   createUserLoginController,
+  changePasswordController,
 };

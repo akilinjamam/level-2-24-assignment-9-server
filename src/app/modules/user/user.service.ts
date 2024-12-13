@@ -1,6 +1,7 @@
 import { PrismaClient, UserType } from "@prisma/client";
-import { TLogin, TUser } from "./user.constant";
+import { TChangePassword, TLogin, TUser } from "./user.constant";
 import { createToken } from "../../../token/createToken";
+import { DecodedToken } from "../../../auth/auth";
 
 const prisma = new PrismaClient();
 
@@ -48,8 +49,6 @@ const createLogin = async (data: TLogin) => {
     userType: findUser?.userType,
   };
 
-  console.log(jwt_token);
-
   let token;
   const getTokens = createToken(
     jwtPayload,
@@ -62,7 +61,25 @@ const createLogin = async (data: TLogin) => {
   return { accesstoken: token };
 };
 
+const changePassword = async (data: TChangePassword, getUser: DecodedToken) => {
+  console.log(getUser);
+
+  const newData = {
+    password: data.newPassword,
+  };
+
+  const result = await prisma.user.update({
+    where: {
+      email: getUser?.email as string,
+    },
+    data: newData,
+  });
+
+  return result;
+};
+
 export const userService = {
   createUser,
   createLogin,
+  changePassword,
 };
