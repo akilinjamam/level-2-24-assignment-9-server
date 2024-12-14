@@ -1,9 +1,17 @@
 import { PrismaClient } from "@prisma/client";
 
-const createRating = async (data: string) => {
-  const prism = new PrismaClient();
+type TRating = {
+  productId: string;
+  rating: number;
+};
 
-  return "";
+const prism = new PrismaClient();
+const createRating = async (data: TRating) => {
+  const result = await prism.rating.create({
+    data: data,
+  });
+
+  return result;
 };
 
 export const ratingService = {

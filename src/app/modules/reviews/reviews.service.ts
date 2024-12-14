@@ -1,9 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
-const createReviews = async (data: any) => {
-  const result = "";
+type TReviews = {
+  review: string;
+  productId: string;
+};
 
+const prisma = new PrismaClient();
+const createReviews = async (data: TReviews) => {
+  const result = await prisma.review.create({ data: data });
   return result;
 };
 

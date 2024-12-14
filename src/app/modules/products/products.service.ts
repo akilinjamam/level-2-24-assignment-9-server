@@ -1,5 +1,3 @@
-// const prisma = new PrismaClient();
-
 import { PrismaClient } from "@prisma/client";
 import { TProduct } from "./products.constant";
 import { prisma } from "../../../shared/prisma";
