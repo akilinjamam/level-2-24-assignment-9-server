@@ -1,12 +1,18 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { validateRequest } from "../../../middleware/validateRequest";
 import { productSchema } from "./product.validation";
 import { productController } from "./products.controller";
+import { upload } from "../../sendImgToCloudinary/sendImgToCloudinary";
 
 const router = express.Router();
 
 router.post(
   "/create-product",
+  upload.fields([{ name: "images" }]),
+  (req: Request, _response: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
   validateRequest(productSchema.createProductSchema),
   productController.createProduct
 );

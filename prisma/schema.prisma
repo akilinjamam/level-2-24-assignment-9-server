@@ -32,6 +32,9 @@ model Products {
   productId   String   @id @default(uuid()) @db.Uuid
   productName String
   category    String
+  quantity    Int      @default(0)
+  discount    Int      @default(0)
+  stock       Boolean  @default(true)
   price       Int
   details     String
   clicked     Int

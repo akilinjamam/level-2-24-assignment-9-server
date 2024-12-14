@@ -1,3 +1,5 @@
+export type TImageFiles = { [fieldname: string]: Express.Multer.File[] };
+
 export type TProduct = {
   productName: string;
   category: string;

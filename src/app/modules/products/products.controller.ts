@@ -1,8 +1,15 @@
 import { tryCatchAsync } from "../../../shared/tryCatchAsynce";
+import { TImageFiles } from "./products.constant";
 import { productService } from "./products.service";
 
 const createProduct = tryCatchAsync(async (req, res) => {
-  const result = await productService.createProductService(req.body);
+  const images = req?.files as TImageFiles;
+  const allImages = images?.images?.map((image) => image?.path);
+
+  const result = await productService.createProductService(
+    req.body,
+    allImages as string[]
+  );
 
   res.status(200).json({
     success: true,

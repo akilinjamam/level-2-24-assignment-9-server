@@ -6,9 +6,16 @@ import { prisma } from "../../../shared/prisma";
 
 const pirsma = new PrismaClient();
 
-const createProductService = async (data: TProduct) => {
+const createProductService = async (data: TProduct, images: string[]) => {
+  const newData = {
+    ...data,
+    images,
+  };
+
+  console.log(newData);
+
   const result = await prisma.products.create({
-    data: data,
+    data: newData,
   });
   return result;
 };
