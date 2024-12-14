@@ -48,14 +48,15 @@ model Products {
 }
 
 model User {
-  userId      String   @id @default(uuid()) @db.Uuid
-  userName    String
-  email       String   @unique
-  phoneNumber String
-  address     String
-  password    String   @default("1234")
-  userType    UserType
-  follows     Follow[]
+  userId           String             @id @default(uuid()) @db.Uuid
+  userName         String
+  email            String             @unique
+  phoneNumber      String
+  address          String
+  password         String             @default("1234")
+  userType         UserType
+  follows          Follow[]
+  purchasedProduct PurchasedProduct[]
 
   @@map("users")
 }
@@ -102,7 +103,25 @@ model Replay {
   @@map("replays")
 }
 
+model PurchasedProduct {
+  purchasedProductId String  @id @default(uuid()) @db.Uuid
+  productName        String
+  details            String
+  quantity           Int
+  category           String
+  price              Int
+  totalPrice         Int
+  discount           Int
+  purchased          Boolean @default(false)
+  userId             String  @db.Uuid
+  productId          String
+  user               User    @relation(fields: [userId], references: [userId])
+
+  @@map("purchaseProducts")
+}
+
 enum UserType {
   USER
   VENDOR
+  ADMIN
 }

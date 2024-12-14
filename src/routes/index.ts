@@ -1,5 +1,6 @@
 import { followRouter } from "../app/modules/follow/follows.route";
 import { productRouter } from "../app/modules/products/products.route";
+import { purchasedProductRouter } from "../app/modules/purchasedProduct/purchasedProduct.route";
 import { ratingRoute } from "../app/modules/ratings/ratings.route";
 import { replayRouter } from "../app/modules/replay/replay.router";
 import { reviewRouter } from "../app/modules/reviews/reviews.route";
@@ -10,6 +11,10 @@ const routes = [
   {
     path: "products",
     routes: productRouter,
+  },
+  {
+    path: "purchaseProducts",
+    routes: purchasedProductRouter,
   },
   {
     path: "vendors",
