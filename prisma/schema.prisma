@@ -36,6 +36,7 @@ model Products {
   discount    Int      @default(0)
   stock       Boolean  @default(true)
   price       Int
+  flashSale   Boolean  @default(false)
   details     String
   clicked     Int
   images      String[]

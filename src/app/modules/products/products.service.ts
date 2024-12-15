@@ -59,9 +59,18 @@ const getProductWithCategory = async () => {
 
   return result;
 };
+const getProductWithFlashSale = async () => {
+  const result = await prisma.products.findMany({
+    where: {
+      flashSale: true,
+    },
+  });
+  return result;
+};
 
 export const productService = {
   createProductService,
   getProductService,
   getProductWithCategory,
+  getProductWithFlashSale,
 };

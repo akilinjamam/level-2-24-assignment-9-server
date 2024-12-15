@@ -56,8 +56,22 @@ const getProductWithCategory = tryCatchAsync(async (req, res) => {
   });
 });
 
+const getProductWithFlashSale = tryCatchAsync(async (req, res) => {
+  const { category, from, to } = req.query;
+
+  const result = await productService.getProductWithFlashSale();
+
+  res.status(200).json({
+    success: true,
+    status: 200,
+    message: "Product retrieved flash sales successfully",
+    data: result,
+  });
+});
+
 export const productController = {
   createProduct,
   getProduct,
   getProductWithCategory,
+  getProductWithFlashSale,
 };

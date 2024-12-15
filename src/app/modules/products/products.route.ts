@@ -20,5 +20,6 @@ router.post(
 );
 router.get("/", productController.getProduct);
 router.get("/get-with-category", productController.getProductWithCategory);
+router.get("/get-with-flashSale", productController.getProductWithFlashSale);
 
 export const productRouter = router;
