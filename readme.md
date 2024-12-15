@@ -1,8 +1,8 @@
-# Project Name: Library Management System API
+# Project Name: E-Commerce website
 
 ## Description:
 
-This project helps to borrow books from online. where user can be a member of the library and see all the lists of book. And if he want he can borrow books from lists. And user must have to return before return date. Return period is 14 days max. within this date, user must have to return book to the library authority.
+this website is used for online buy and sale products from different vendors. here customer can buy product, can pay through online payment easily
 
 ## Technologies used in this projects are:
 
@@ -29,23 +29,3 @@ This project helps to borrow books from online. where user can be a member of th
 9. arranges code with moduler pattern
 
 ## Key Features & Functionality:
-
-### Book Management:
-
-Add, Update, and Delete Books: Allow admins or librarians to manage the library's book inventory.
-
-### Member Management:
-
-Member can be created, delete, update, get , get with sigle Id
-
-### Borrowing and Returning Books
-
-Member can borrow books from library and can return book
-
-### Overdue Management
-
-Overdue books can be shown in this project
-
-## Bugs:
-
-Bugs are fixed here in this project
