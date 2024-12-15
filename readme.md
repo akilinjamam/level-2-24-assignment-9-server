@@ -27,5 +27,3 @@ this website is used for online buy and sale products from different vendors. he
 7. designed prisma schema
 8. migrated prisma
 9. arranges code with moduler pattern
-
-## Key Features & Functionality:
