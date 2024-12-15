@@ -80,6 +80,7 @@ const getProductWithId = async (id: string) => {
     include: {
       Rating: true,
       vendor: true,
+      Review: true,
     },
   });
   return result;

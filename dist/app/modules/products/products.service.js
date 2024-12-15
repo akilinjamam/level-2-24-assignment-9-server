@@ -46,6 +46,7 @@ const getProductService = (category, from, to) => __awaiter(void 0, void 0, void
         include: {
             vendor: true,
             Review: true,
+            Rating: true,
         },
     });
     return result;
