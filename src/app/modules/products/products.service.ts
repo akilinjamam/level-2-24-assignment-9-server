@@ -52,7 +52,16 @@ const getProductService = async (
   return result;
 };
 
+const getProductWithCategory = async () => {
+  const result = await prisma.products.groupBy({
+    by: ["category"],
+  });
+
+  return result;
+};
+
 export const productService = {
   createProductService,
   getProductService,
+  getProductWithCategory,
 };

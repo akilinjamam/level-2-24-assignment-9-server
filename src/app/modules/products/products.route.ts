@@ -3,11 +3,13 @@ import { validateRequest } from "../../../middleware/validateRequest";
 import { productSchema } from "./product.validation";
 import { productController } from "./products.controller";
 import { upload } from "../../sendImgToCloudinary/sendImgToCloudinary";
+import auth from "../../../auth/auth";
 
 const router = express.Router();
 
 router.post(
   "/create-product",
+  auth(),
   upload.fields([{ name: "images" }]),
   (req: Request, _response: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body.data);
@@ -17,5 +19,6 @@ router.post(
   productController.createProduct
 );
 router.get("/", productController.getProduct);
+router.get("/get-with-category", productController.getProductWithCategory);
 
 export const productRouter = router;
