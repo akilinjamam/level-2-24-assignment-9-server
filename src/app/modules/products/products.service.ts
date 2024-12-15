@@ -72,6 +72,10 @@ const getProductWithId = async (id: string) => {
     where: {
       productId: id,
     },
+    include: {
+      Rating: true,
+      vendor: true,
+    },
   });
   return result;
 };
