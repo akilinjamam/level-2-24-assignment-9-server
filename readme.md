@@ -1,4 +1,4 @@
-# Project Name: E-Commerce website
+# Project Name: E-Commerce website server
 
 ## Description:
 
