@@ -43,6 +43,10 @@ const getProductService = (category, from, to) => __awaiter(void 0, void 0, void
             },
         },
         where: addFilterCondition,
+        include: {
+            vendor: true,
+            Review: true,
+        },
     });
     return result;
 });

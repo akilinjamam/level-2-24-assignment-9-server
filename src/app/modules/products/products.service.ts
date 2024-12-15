@@ -47,6 +47,11 @@ const getProductService = async (
       },
     },
     where: addFilterCondition,
+    include: {
+      vendor: true,
+      Review: true,
+      Rating: true,
+    },
   });
 
   return result;
