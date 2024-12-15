@@ -67,10 +67,19 @@ const getProductWithFlashSale = async () => {
   });
   return result;
 };
+const getProductWithId = async (id: string) => {
+  const result = await prisma.products.findFirst({
+    where: {
+      productId: id,
+    },
+  });
+  return result;
+};
 
 export const productService = {
   createProductService,
   getProductService,
   getProductWithCategory,
   getProductWithFlashSale,
+  getProductWithId,
 };

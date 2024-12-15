@@ -69,9 +69,23 @@ const getProductWithFlashSale = tryCatchAsync(async (req, res) => {
   });
 });
 
+const getProductWithId = tryCatchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const result = await productService.getProductWithId(id);
+
+  res.status(200).json({
+    success: true,
+    status: 200,
+    message: "Product retrieved with id successfully",
+    data: result,
+  });
+});
+
 export const productController = {
   createProduct,
   getProduct,
   getProductWithCategory,
   getProductWithFlashSale,
+  getProductWithId,
 };
