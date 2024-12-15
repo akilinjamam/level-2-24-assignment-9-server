@@ -25,8 +25,27 @@ const getAllVendor = async () => {
 
   return result;
 };
+const getAllVendorWithId = async (id: string) => {
+  const result = await pirsma.vendor.findFirst({
+    where: {
+      vendorId: id,
+    },
+    include: {
+      product: true,
+      follows: {
+        include: {
+          vendor: true,
+          user: true,
+        },
+      },
+    },
+  });
+
+  return result;
+};
 
 export const vendorService = {
   createVendor,
   getAllVendor,
+  getAllVendorWithId,
 };

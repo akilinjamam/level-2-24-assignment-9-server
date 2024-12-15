@@ -73,6 +73,7 @@ const getProductWithId = (id) => __awaiter(void 0, void 0, void 0, function* () 
         include: {
             Rating: true,
             vendor: true,
+            Review: true,
         },
     });
     return result;
