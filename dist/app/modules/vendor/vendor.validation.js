@@ -16,7 +16,6 @@ const createvendorValidationSchema = zod_1.z.object({
             .string()
             .min(1, "Details are required.")
             .max(500, "Details should not exceed 500 characters."),
-        logo: zod_1.z.string(),
     }),
 });
 exports.vendorSchema = {

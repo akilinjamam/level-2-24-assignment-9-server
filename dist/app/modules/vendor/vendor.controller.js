@@ -13,7 +13,14 @@ exports.vendorController = void 0;
 const tryCatchAsynce_1 = require("../../../shared/tryCatchAsynce");
 const vendor_service_1 = require("./vendor.service");
 const createVendorController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield vendor_service_1.vendorService.createVendor(req.body);
+    var _a;
+    const { userType } = req.user;
+    if (userType !== "VENDOR") {
+        throw new Error("only vendor can create product");
+    }
+    const images = req === null || req === void 0 ? void 0 : req.files;
+    const image = (_a = images === null || images === void 0 ? void 0 : images.images[0]) === null || _a === void 0 ? void 0 : _a.path;
+    const result = yield vendor_service_1.vendorService.createVendor(req.body, image);
     res.status(201).json({
         success: true,
         status: 201,

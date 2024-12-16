@@ -8,8 +8,13 @@ const validateRequest_1 = require("../../../middleware/validateRequest");
 const vendor_controller_1 = require("./vendor.controller");
 const express_1 = __importDefault(require("express"));
 const vendor_validation_1 = require("./vendor.validation");
+const auth_1 = __importDefault(require("../../../auth/auth"));
+const sendImgToCloudinary_1 = require("../../sendImgToCloudinary/sendImgToCloudinary");
 const router = express_1.default.Router();
-router.post("/create-vendor", (0, validateRequest_1.validateRequest)(vendor_validation_1.vendorSchema.createvendorValidationSchema), vendor_controller_1.vendorController.createVendorController);
+router.post("/create-vendor", (0, auth_1.default)(), sendImgToCloudinary_1.upload.fields([{ name: "images" }]), (req, _response, next) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+}, (0, validateRequest_1.validateRequest)(vendor_validation_1.vendorSchema.createvendorValidationSchema), vendor_controller_1.vendorController.createVendorController);
 router.get("/", vendor_controller_1.vendorController.getVendorController);
 router.get("/get-with-id/:id", vendor_controller_1.vendorController.getVendorWithController);
 exports.vendorRouter = router;
