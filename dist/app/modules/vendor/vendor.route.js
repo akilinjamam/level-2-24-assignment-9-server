@@ -11,4 +11,5 @@ const vendor_validation_1 = require("./vendor.validation");
 const router = express_1.default.Router();
 router.post("/create-vendor", (0, validateRequest_1.validateRequest)(vendor_validation_1.vendorSchema.createvendorValidationSchema), vendor_controller_1.vendorController.createVendorController);
 router.get("/", vendor_controller_1.vendorController.getVendorController);
+router.get("/get-with-id/:id", vendor_controller_1.vendorController.getVendorWithController);
 exports.vendorRouter = router;

@@ -14,7 +14,6 @@ const createvendorValidationSchema = z.object({
       .string()
       .min(1, "Details are required.")
       .max(500, "Details should not exceed 500 characters."),
-    logo: z.string(),
   }),
 });
 
