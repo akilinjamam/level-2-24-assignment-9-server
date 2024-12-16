@@ -21,6 +21,7 @@ model Vendor {
   shopName      String
   details       String
   logo          String
+  userId        String     @default("1234")
   followedCount Int        @default(0)
   product       Products[]
   follows       Follow[]

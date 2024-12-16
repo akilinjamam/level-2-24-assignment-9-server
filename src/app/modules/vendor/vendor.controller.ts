@@ -4,7 +4,7 @@ import { TImageFiles } from "../products/products.constant";
 import { vendorService } from "./vendor.service";
 
 const createVendorController = tryCatchAsync(async (req, res) => {
-  const { userType } = req.user as DecodedToken;
+  const { userType, userId } = req.user as DecodedToken;
 
   if (userType !== "VENDOR") {
     throw new Error("only vendor can create product");
@@ -15,7 +15,8 @@ const createVendorController = tryCatchAsync(async (req, res) => {
 
   const result = await vendorService.createVendor(
     req.body,
-    image as unknown as string
+    image as unknown as string,
+    userId
   );
 
   res.status(201).json({

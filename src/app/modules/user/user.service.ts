@@ -42,6 +42,7 @@ const createLogin = async (data: TLogin) => {
   const jwt_expires_id = process.env.JWT_ACCESS_EXPIRES_IN;
 
   const jwtPayload = {
+    userId: findUser?.userId,
     userName: findUser?.userName,
     email: findUser?.email,
     address: findUser?.address,

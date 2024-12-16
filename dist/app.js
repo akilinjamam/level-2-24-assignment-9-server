@@ -11,6 +11,13 @@ const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
+app.use((0, cors_1.default)({
+    origin: [
+        "level-2-24-assignment-9-client.vercel.app",
+        "http://localhost:5173",
+    ],
+    credentials: true,
+}));
 app.get("/", (req, res) => {
     res.send("level-2-24-assignment-9 server...");
 });

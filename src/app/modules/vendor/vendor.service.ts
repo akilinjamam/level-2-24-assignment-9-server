@@ -3,10 +3,11 @@ import { TVendor } from "./vendor.constant";
 
 const pirsma = new PrismaClient();
 
-const createVendor = async (data: TVendor, image: string) => {
+const createVendor = async (data: TVendor, image: string, userId: string) => {
   const newData = {
     ...data,
     logo: image,
+    userId: userId,
   };
   const result = await pirsma.vendor.create({
     data: newData,
