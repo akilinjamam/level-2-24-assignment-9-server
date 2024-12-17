@@ -68,10 +68,21 @@ const getProductWithId = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awa
         data: result,
     });
 }));
+const updateProduct = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield products_service_1.productService.updateProduct(id, req === null || req === void 0 ? void 0 : req.body);
+    res.status(200).json({
+        success: true,
+        status: 200,
+        message: "Product updated with id successfully",
+        data: result,
+    });
+}));
 exports.productController = {
     createProduct,
     getProduct,
     getProductWithCategory,
     getProductWithFlashSale,
     getProductWithId,
+    updateProduct,
 };

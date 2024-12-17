@@ -78,10 +78,20 @@ const getProductWithId = (id) => __awaiter(void 0, void 0, void 0, function* () 
     });
     return result;
 });
+const updateProduct = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.prisma.products.update({
+        where: {
+            productId: id,
+        },
+        data: data,
+    });
+    return result;
+});
 exports.productService = {
     createProductService,
     getProductService,
     getProductWithCategory,
     getProductWithFlashSale,
     getProductWithId,
+    updateProduct,
 };
