@@ -19,5 +19,5 @@ router.get("/", products_controller_1.productController.getProduct);
 router.get("/get-with-category", products_controller_1.productController.getProductWithCategory);
 router.get("/get-with-flashSale", products_controller_1.productController.getProductWithFlashSale);
 router.get("/get-with-id/:id", products_controller_1.productController.getProductWithId);
-router.get("/update-with-id/:id", products_controller_1.productController.updateProduct);
+router.patch("/update-with-id/:id", products_controller_1.productController.updateProduct);
 exports.productRouter = router;
