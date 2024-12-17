@@ -69,6 +69,11 @@ const updateVendorController = tryCatchAsync(async (req, res) => {
 });
 
 const updateVendorImgController = tryCatchAsync(async (req, res) => {
+  const { userType } = req.user as DecodedToken;
+
+  if (userType !== "VENDOR") {
+    throw new Error("only vendor can create product");
+  }
   const images = req?.files as TImageFiles;
   const image = images?.images[0]?.path;
 

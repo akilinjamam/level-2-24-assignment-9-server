@@ -28,6 +28,7 @@ router.get(
 router.patch("/update-vendor/:id", vendorController.updateVendorController);
 router.patch(
   "/update-vendor-img/:id",
+  auth(),
   upload.fields([{ name: "images" }]),
   vendorController.updateVendorImgController
 );

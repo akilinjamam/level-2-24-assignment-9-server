@@ -77,10 +77,20 @@ const updateVendor = (id, data) => __awaiter(void 0, void 0, void 0, function* (
     });
     return result;
 });
+const updateVendorImg = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.prisma.vendor.update({
+        where: {
+            vendorId: id,
+        },
+        data: data,
+    });
+    return result;
+});
 exports.vendorService = {
     createVendor,
     getAllVendor,
     getAllVendorWithId,
     getAllVendorWithUserId,
     updateVendor,
+    updateVendorImg,
 };

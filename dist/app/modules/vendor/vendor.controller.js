@@ -64,10 +64,26 @@ const updateVendorController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) =>
         data: result,
     });
 }));
+const updateVendorImgController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const images = req === null || req === void 0 ? void 0 : req.files;
+    const image = (_a = images === null || images === void 0 ? void 0 : images.images[0]) === null || _a === void 0 ? void 0 : _a.path;
+    const newUpdatedData = {
+        logo: image,
+    };
+    const result = yield vendor_service_1.vendorService.updateVendorImg(req.params.id, newUpdatedData);
+    res.status(201).json({
+        success: true,
+        status: 201,
+        message: "Vendor image updated successfully",
+        data: result,
+    });
+}));
 exports.vendorController = {
     createVendorController,
     getVendorController,
     getVendorWithController,
     getVendorWithUserIdController,
     updateVendorController,
+    updateVendorImgController,
 };
