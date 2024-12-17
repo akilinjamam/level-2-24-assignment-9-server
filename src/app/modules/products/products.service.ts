@@ -86,10 +86,22 @@ const getProductWithId = async (id: string) => {
   return result;
 };
 
+const updateProduct = async (id: string, data: any) => {
+  const result = await prisma.products.update({
+    where: {
+      productId: id,
+    },
+    data: data,
+  });
+
+  return result;
+};
+
 export const productService = {
   createProductService,
   getProductService,
   getProductWithCategory,
   getProductWithFlashSale,
   getProductWithId,
+  updateProduct,
 };

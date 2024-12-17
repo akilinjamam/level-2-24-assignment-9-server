@@ -66,6 +66,10 @@ const updateVendorController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) =>
 }));
 const updateVendorImgController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
+    const { userType } = req.user;
+    if (userType !== "VENDOR") {
+        throw new Error("only vendor can create product");
+    }
     const images = req === null || req === void 0 ? void 0 : req.files;
     const image = (_a = images === null || images === void 0 ? void 0 : images.images[0]) === null || _a === void 0 ? void 0 : _a.path;
     const newUpdatedData = {

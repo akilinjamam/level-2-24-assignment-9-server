@@ -19,5 +19,5 @@ router.get("/", vendor_controller_1.vendorController.getVendorController);
 router.get("/get-with-id/:id", vendor_controller_1.vendorController.getVendorWithController);
 router.get("/get-with-user-id/:id", vendor_controller_1.vendorController.getVendorWithUserIdController);
 router.patch("/update-vendor/:id", vendor_controller_1.vendorController.updateVendorController);
-router.patch("/update-vendor-img/:id", sendImgToCloudinary_1.upload.fields([{ name: "images" }]), vendor_controller_1.vendorController.updateVendorImgController);
+router.patch("/update-vendor-img/:id", (0, auth_1.default)(), sendImgToCloudinary_1.upload.fields([{ name: "images" }]), vendor_controller_1.vendorController.updateVendorImgController);
 exports.vendorRouter = router;

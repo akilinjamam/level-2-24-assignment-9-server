@@ -22,5 +22,6 @@ router.get("/", productController.getProduct);
 router.get("/get-with-category", productController.getProductWithCategory);
 router.get("/get-with-flashSale", productController.getProductWithFlashSale);
 router.get("/get-with-id/:id", productController.getProductWithId);
+router.get("/update-with-id/:id", productController.updateProduct);
 
 export const productRouter = router;
