@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.vendorService = void 0;
 const client_1 = require("@prisma/client");
+const prisma_1 = require("../../../shared/prisma");
 const pirsma = new client_1.PrismaClient();
 const createVendor = (data, image, userId) => __awaiter(void 0, void 0, void 0, function* () {
     const newData = Object.assign(Object.assign({}, data), { logo: image, userId: userId });
@@ -67,9 +68,19 @@ const getAllVendorWithUserId = (id) => __awaiter(void 0, void 0, void 0, functio
     });
     return result;
 });
+const updateVendor = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.prisma.vendor.update({
+        where: {
+            vendorId: id,
+        },
+        data: data,
+    });
+    return result;
+});
 exports.vendorService = {
     createVendor,
     getAllVendor,
     getAllVendorWithId,
     getAllVendorWithUserId,
+    updateVendor,
 };

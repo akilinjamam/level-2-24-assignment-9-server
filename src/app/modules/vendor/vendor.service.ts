@@ -79,6 +79,16 @@ const updateVendor = async (id: string, data: Record<string, unknown>) => {
 
   return result;
 };
+const updateVendorImg = async (id: string, data: Record<string, unknown>) => {
+  const result = await prisma.vendor.update({
+    where: {
+      vendorId: id,
+    },
+    data: data,
+  });
+
+  return result;
+};
 
 export const vendorService = {
   createVendor,
@@ -86,4 +96,5 @@ export const vendorService = {
   getAllVendorWithId,
   getAllVendorWithUserId,
   updateVendor,
+  updateVendorImg,
 };

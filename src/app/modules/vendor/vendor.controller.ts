@@ -68,10 +68,32 @@ const updateVendorController = tryCatchAsync(async (req, res) => {
   });
 });
 
+const updateVendorImgController = tryCatchAsync(async (req, res) => {
+  const images = req?.files as TImageFiles;
+  const image = images?.images[0]?.path;
+
+  const newUpdatedData = {
+    logo: image,
+  };
+
+  const result = await vendorService.updateVendorImg(
+    req.params.id,
+    newUpdatedData
+  );
+
+  res.status(201).json({
+    success: true,
+    status: 201,
+    message: "Vendor image updated successfully",
+    data: result,
+  });
+});
+
 export const vendorController = {
   createVendorController,
   getVendorController,
   getVendorWithController,
   getVendorWithUserIdController,
   updateVendorController,
+  updateVendorImgController,
 };
