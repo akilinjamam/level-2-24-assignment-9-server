@@ -21,5 +21,9 @@ router.post(
 
 router.get("/", vendorController.getVendorController);
 router.get("/get-with-id/:id", vendorController.getVendorWithController);
+router.get(
+  "/get-with-user-id/:id",
+  vendorController.getVendorWithUserIdController
+);
 
 export const vendorRouter = router;

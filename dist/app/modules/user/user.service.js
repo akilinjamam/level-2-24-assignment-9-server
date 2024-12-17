@@ -48,6 +48,7 @@ const createLogin = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const jwt_token = process.env.JWT_ACCESS_SECRET;
     const jwt_expires_id = process.env.JWT_ACCESS_EXPIRES_IN;
     const jwtPayload = {
+        userId: findUser === null || findUser === void 0 ? void 0 : findUser.userId,
         userName: findUser === null || findUser === void 0 ? void 0 : findUser.userName,
         email: findUser === null || findUser === void 0 ? void 0 : findUser.email,
         address: findUser === null || findUser === void 0 ? void 0 : findUser.address,
