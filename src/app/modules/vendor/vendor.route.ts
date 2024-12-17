@@ -25,5 +25,6 @@ router.get(
   "/get-with-user-id/:id",
   vendorController.getVendorWithUserIdController
 );
+router.patch("/update-vendor/:id", vendorController.updateVendorController);
 
 export const vendorRouter = router;

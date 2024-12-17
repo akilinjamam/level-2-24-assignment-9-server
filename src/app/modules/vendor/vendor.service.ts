@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { TVendor } from "./vendor.constant";
+import { prisma } from "../../../shared/prisma";
 
 const pirsma = new PrismaClient();
 
@@ -68,9 +69,21 @@ const getAllVendorWithUserId = async (id: string) => {
   return result;
 };
 
+const updateVendor = async (id: string, data: Record<string, unknown>) => {
+  const result = await prisma.vendor.update({
+    where: {
+      vendorId: id,
+    },
+    data: data,
+  });
+
+  return result;
+};
+
 export const vendorService = {
   createVendor,
   getAllVendor,
   getAllVendorWithId,
   getAllVendorWithUserId,
+  updateVendor,
 };

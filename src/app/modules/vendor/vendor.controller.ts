@@ -57,10 +57,21 @@ const getVendorWithUserIdController = tryCatchAsync(async (req, res) => {
     data: result,
   });
 });
+const updateVendorController = tryCatchAsync(async (req, res) => {
+  const result = await vendorService.updateVendor(req.params.id, req.body);
+
+  res.status(201).json({
+    success: true,
+    status: 201,
+    message: "Vendor updated successfully",
+    data: result,
+  });
+});
 
 export const vendorController = {
   createVendorController,
   getVendorController,
   getVendorWithController,
   getVendorWithUserIdController,
+  updateVendorController,
 };

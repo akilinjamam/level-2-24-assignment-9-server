@@ -50,8 +50,26 @@ const getAllVendorWithId = (id) => __awaiter(void 0, void 0, void 0, function* (
     });
     return result;
 });
+const getAllVendorWithUserId = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield pirsma.vendor.findFirst({
+        where: {
+            userId: id,
+        },
+        include: {
+            product: true,
+            follows: {
+                include: {
+                    vendor: true,
+                    user: true,
+                },
+            },
+        },
+    });
+    return result;
+});
 exports.vendorService = {
     createVendor,
     getAllVendor,
     getAllVendorWithId,
+    getAllVendorWithUserId,
 };

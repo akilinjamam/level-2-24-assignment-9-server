@@ -46,8 +46,18 @@ const getVendorWithController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) =
         data: result,
     });
 }));
+const getVendorWithUserIdController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield vendor_service_1.vendorService.getAllVendorWithUserId(req.params.id);
+    res.status(201).json({
+        success: true,
+        status: 201,
+        message: "Vendor id found with user-id successfully",
+        data: result,
+    });
+}));
 exports.vendorController = {
     createVendorController,
     getVendorController,
     getVendorWithController,
+    getVendorWithUserIdController,
 };

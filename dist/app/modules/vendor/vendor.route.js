@@ -17,4 +17,5 @@ router.post("/create-vendor", (0, auth_1.default)(), sendImgToCloudinary_1.uploa
 }, (0, validateRequest_1.validateRequest)(vendor_validation_1.vendorSchema.createvendorValidationSchema), vendor_controller_1.vendorController.createVendorController);
 router.get("/", vendor_controller_1.vendorController.getVendorController);
 router.get("/get-with-id/:id", vendor_controller_1.vendorController.getVendorWithController);
+router.get("/get-with-user-id/:id", vendor_controller_1.vendorController.getVendorWithUserIdController);
 exports.vendorRouter = router;
