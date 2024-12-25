@@ -16,7 +16,7 @@ export const createUserValidationSchema = z.object({
       .max(100, "Email should not exceed 100 characters."),
     phoneNumber: z.string().max(11, "number not exceed 11 characters."),
 
-    userType: z.enum(["USER", "VENDOR"]),
+    userType: z.enum(["USER", "VENDOR", "ADMIN"]),
   }),
 });
 
