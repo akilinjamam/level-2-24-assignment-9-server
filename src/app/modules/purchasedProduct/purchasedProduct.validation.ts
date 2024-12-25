@@ -11,6 +11,7 @@ const createPurchasedProductSchema = z.object({
     details: z.string().min(1, "Product details are required"),
     userId: z.string(),
     productId: z.string(),
+    vendorId: z.string(),
   }),
 });
 
@@ -25,6 +26,7 @@ const createAddToCartProductSchema = z.object({
     details: z.string().min(1, "Product details are required"),
     userId: z.string(),
     productId: z.string(),
+    vendorId: z.string(),
   }),
 });
 

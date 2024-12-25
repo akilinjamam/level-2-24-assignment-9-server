@@ -81,6 +81,18 @@ const getProductWithId = tryCatchAsync(async (req, res) => {
     data: result,
   });
 });
+const getProductWithVendorId = tryCatchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const result = await productService.getProductWithVendorId(id);
+
+  res.status(200).json({
+    success: true,
+    status: 200,
+    message: "Product retrieved with vendor id successfully",
+    data: result,
+  });
+});
 
 const updateProduct = tryCatchAsync(async (req, res) => {
   const { id } = req.params;
@@ -94,6 +106,39 @@ const updateProduct = tryCatchAsync(async (req, res) => {
     data: result,
   });
 });
+const updateImgProduct = tryCatchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const images = req?.files as TImageFiles;
+  const image = images?.images[0]?.path;
+  const { indexId } = req.body;
+
+  const result = await productService.updateImageProduct(
+    id,
+    image as string,
+    indexId
+  );
+
+  res.status(200).json({
+    success: true,
+    status: 200,
+    message: "Product image updated with id successfully",
+    data: result,
+  });
+});
+
+const deleteProduct = tryCatchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const result = await productService.deleteProduct(id);
+
+  res.status(200).json({
+    success: true,
+    status: 200,
+    message: "Product deleted successfully",
+    data: result,
+  });
+});
 
 export const productController = {
   createProduct,
@@ -101,5 +146,8 @@ export const productController = {
   getProductWithCategory,
   getProductWithFlashSale,
   getProductWithId,
+  getProductWithVendorId,
   updateProduct,
+  updateImgProduct,
+  deleteProduct,
 };

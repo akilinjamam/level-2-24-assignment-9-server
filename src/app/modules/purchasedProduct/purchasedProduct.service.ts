@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 
-import { paymentInitialization } from "./purchasedProduct.paymentInitialization";
 const prisma = new PrismaClient();
 
 const createPayment = async (data: any) => {
@@ -43,7 +42,7 @@ const successPayment = async (
   purchasedProductId: string
 ) => {
   try {
-    const result = await prisma.$transaction(async (prismaTrans) => {
+    await prisma.$transaction(async (prismaTrans) => {
       const findProduct = await prismaTrans.products.findFirst({
         where: {
           productId: productId,
@@ -68,13 +67,13 @@ const successPayment = async (
       }
 
       const findPurchaseProductQunatity = findPurchaseProduct?.quantity;
-      const findPurchaseProductPrice = findPurchaseProduct?.price;
-      const findPurchaseProductDiscount = findPurchaseProduct?.price;
+      // const findPurchaseProductPrice = findPurchaseProduct?.price;
+      // const findPurchaseProductDiscount = findPurchaseProduct?.price;
 
       const updateQuantityDataForProducts =
         (findProduct?.quantity as number) - findPurchaseProductQunatity;
 
-      let newStock;
+      let newStock = true;
       if (updateQuantityDataForProducts === 0) {
         newStock = false;
       }
@@ -82,6 +81,7 @@ const successPayment = async (
       const newUpdatedDataForProduct = {
         quantity: updateQuantityDataForProducts,
         stock: newStock,
+        discount: findPurchaseProduct?.discount,
       };
 
       await prismaTrans.products.update({
@@ -91,16 +91,14 @@ const successPayment = async (
         data: newUpdatedDataForProduct,
       });
 
-      const newTotalPrice =
-        findPurchaseProductPrice * findPurchaseProductQunatity -
-        findPurchaseProductDiscount;
-
-      const newPurchasedUpdatedData = {
-        price: findPurchaseProductPrice,
-        quantity: findPurchaseProductQunatity,
-        totalPrice: newTotalPrice,
-        discount: findPurchaseProductDiscount,
-      };
+      await prismaTrans.purchasedProduct.update({
+        where: {
+          purchasedProductId: purchasedProductId,
+        },
+        data: {
+          purchased: true,
+        },
+      });
     });
   } catch (error) {
     console.error("Transaction failed, rolled back:", error);
@@ -117,9 +115,117 @@ const addToCart = async (data: any) => {
   });
   return result;
 };
+const getCartWithUserId = async (id: string) => {
+  const result = await prisma.purchasedProduct.findMany({
+    where: {
+      userId: id,
+      purchased: false,
+    },
+  });
+  return result;
+};
+
+const deleteCartWithId = async (id: string) => {
+  const result = await prisma.purchasedProduct.delete({
+    where: {
+      purchasedProductId: id,
+    },
+  });
+  return result;
+};
+
+import { UserType } from "@prisma/client";
+
+const getPurchasedHistory = async (id: string, userType: UserType) => {
+  if (userType === "VENDOR") {
+    const findVendorId = await prisma.vendor.findFirst({
+      where: {
+        userId: id,
+      },
+    });
+
+    if (!findVendorId) {
+      throw new Error("Vendor not found");
+    }
+
+    const vendorId = findVendorId.vendorId;
+
+    const result = await prisma.purchasedProduct.findMany({
+      where: {
+        vendorId: vendorId,
+        purchased: true,
+      },
+      include: {
+        Review: {
+          include: {
+            Replay: true,
+          },
+        },
+      },
+    });
+
+    return result;
+  }
+
+  if (userType === "USER") {
+    const result = await prisma.purchasedProduct.findMany({
+      where: {
+        userId: id,
+        purchased: true,
+      },
+      include: {
+        Review: {
+          include: {
+            Replay: true,
+          },
+        },
+      },
+    });
+
+    return result;
+  }
+};
+
+const replaceCart = async (data: any) => {
+  const findAllSameVendor = await prisma.purchasedProduct.findMany({
+    where: {
+      userId: data.userId,
+      purchased: false,
+    },
+  });
+  const getAllProductIds = findAllSameVendor?.map(
+    (ids) => ids.purchasedProductId
+  );
+
+  try {
+    const result = await prisma.$transaction(async (prix) => {
+      await prix.purchasedProduct.deleteMany({
+        where: {
+          purchasedProductId: { in: getAllProductIds },
+        },
+      });
+
+      const result = await prix.purchasedProduct.create({
+        data,
+      });
+
+      return result;
+    });
+
+    return result;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await prisma.$disconnect();
+  }
+};
 
 export const purchasedProductService = {
   successPayment,
   addToCart,
   createPayment,
+  getCartWithUserId,
+  getPurchasedHistory,
+  deleteCartWithId,
+  replaceCart,
 };

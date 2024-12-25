@@ -10,4 +10,5 @@ const reviews_validation_1 = require("./reviews.validation");
 const reviews_controller_1 = require("./reviews.controller");
 const router = express_1.default.Router();
 router.post("/create-review", (0, validateRequest_1.validateRequest)(reviews_validation_1.reviewValidation.reviewValidationSchema), reviews_controller_1.reviewController.createReviewController);
+router.get("/", reviews_controller_1.reviewController.getReviewController);
 exports.reviewRouter = router;

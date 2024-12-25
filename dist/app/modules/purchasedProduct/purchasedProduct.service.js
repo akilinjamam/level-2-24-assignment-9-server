@@ -44,7 +44,7 @@ const createPayment = (data) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const successPayment = (productId, purchasedProductId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield prisma.$transaction((prismaTrans) => __awaiter(void 0, void 0, void 0, function* () {
+        yield prisma.$transaction((prismaTrans) => __awaiter(void 0, void 0, void 0, function* () {
             const findProduct = yield prismaTrans.products.findFirst({
                 where: {
                     productId: productId,
@@ -60,16 +60,17 @@ const successPayment = (productId, purchasedProductId) => __awaiter(void 0, void
                 throw new Error("purchased Quantity can not exceed total Stock Quantity");
             }
             const findPurchaseProductQunatity = findPurchaseProduct === null || findPurchaseProduct === void 0 ? void 0 : findPurchaseProduct.quantity;
-            const findPurchaseProductPrice = findPurchaseProduct === null || findPurchaseProduct === void 0 ? void 0 : findPurchaseProduct.price;
-            const findPurchaseProductDiscount = findPurchaseProduct === null || findPurchaseProduct === void 0 ? void 0 : findPurchaseProduct.price;
+            // const findPurchaseProductPrice = findPurchaseProduct?.price;
+            // const findPurchaseProductDiscount = findPurchaseProduct?.price;
             const updateQuantityDataForProducts = (findProduct === null || findProduct === void 0 ? void 0 : findProduct.quantity) - findPurchaseProductQunatity;
-            let newStock;
+            let newStock = true;
             if (updateQuantityDataForProducts === 0) {
                 newStock = false;
             }
             const newUpdatedDataForProduct = {
                 quantity: updateQuantityDataForProducts,
                 stock: newStock,
+                discount: findPurchaseProduct === null || findPurchaseProduct === void 0 ? void 0 : findPurchaseProduct.discount,
             };
             yield prismaTrans.products.update({
                 where: {
@@ -77,14 +78,14 @@ const successPayment = (productId, purchasedProductId) => __awaiter(void 0, void
                 },
                 data: newUpdatedDataForProduct,
             });
-            const newTotalPrice = findPurchaseProductPrice * findPurchaseProductQunatity -
-                findPurchaseProductDiscount;
-            const newPurchasedUpdatedData = {
-                price: findPurchaseProductPrice,
-                quantity: findPurchaseProductQunatity,
-                totalPrice: newTotalPrice,
-                discount: findPurchaseProductDiscount,
-            };
+            yield prismaTrans.purchasedProduct.update({
+                where: {
+                    purchasedProductId: purchasedProductId,
+                },
+                data: {
+                    purchased: true,
+                },
+            });
         }));
     }
     catch (error) {
@@ -101,8 +102,101 @@ const addToCart = (data) => __awaiter(void 0, void 0, void 0, function* () {
     });
     return result;
 });
+const getCartWithUserId = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma.purchasedProduct.findMany({
+        where: {
+            userId: id,
+            purchased: false,
+        },
+    });
+    return result;
+});
+const deleteCartWithId = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma.purchasedProduct.delete({
+        where: {
+            purchasedProductId: id,
+        },
+    });
+    return result;
+});
+const getPurchasedHistory = (id, userType) => __awaiter(void 0, void 0, void 0, function* () {
+    if (userType === "VENDOR") {
+        const findVendorId = yield prisma.vendor.findFirst({
+            where: {
+                userId: id,
+            },
+        });
+        if (!findVendorId) {
+            throw new Error("Vendor not found");
+        }
+        const vendorId = findVendorId.vendorId;
+        const result = yield prisma.purchasedProduct.findMany({
+            where: {
+                vendorId: vendorId,
+                purchased: true,
+            },
+            include: {
+                Review: {
+                    include: {
+                        Replay: true,
+                    },
+                },
+            },
+        });
+        return result;
+    }
+    if (userType === "USER") {
+        const result = yield prisma.purchasedProduct.findMany({
+            where: {
+                userId: id,
+                purchased: true,
+            },
+            include: {
+                Review: {
+                    include: {
+                        Replay: true,
+                    },
+                },
+            },
+        });
+        return result;
+    }
+});
+const replaceCart = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const findAllSameVendor = yield prisma.purchasedProduct.findMany({
+        where: {
+            userId: data.userId,
+            purchased: false,
+        },
+    });
+    const getAllProductIds = findAllSameVendor === null || findAllSameVendor === void 0 ? void 0 : findAllSameVendor.map((ids) => ids.purchasedProductId);
+    try {
+        const result = yield prisma.$transaction((prix) => __awaiter(void 0, void 0, void 0, function* () {
+            yield prix.purchasedProduct.deleteMany({
+                where: {
+                    purchasedProductId: { in: getAllProductIds },
+                },
+            });
+            const result = yield prix.purchasedProduct.create({
+                data,
+            });
+            return result;
+        }));
+        return result;
+    }
+    catch (error) {
+        console.log(error);
+    }
+    finally {
+        yield prisma.$disconnect();
+    }
+});
 exports.purchasedProductService = {
     successPayment,
     addToCart,
     createPayment,
+    getCartWithUserId,
+    getPurchasedHistory,
+    deleteCartWithId,
+    replaceCart,
 };

@@ -12,6 +12,18 @@ const createReviewController = tryCatchAsync(async (req, res) => {
   });
 });
 
+const getReviewController = tryCatchAsync(async (req, res) => {
+  const result = await reviewService.getReviews(req.body);
+
+  res.status(201).json({
+    success: true,
+    status: 201,
+    message: "reviews found successfully",
+    data: result,
+  });
+});
+
 export const reviewController = {
   createReviewController,
+  getReviewController,
 };

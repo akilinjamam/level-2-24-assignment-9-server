@@ -5,7 +5,7 @@ export const paymentInitialization = async (data: any) => {
     const result = await axios.post(url, {
       store_id: "aamarpaytest",
       tran_id: data.tran_id,
-      success_url: `https://level-2-24-assignment-6-server.vercel.app/api/payment/confirm-payment?productId=${data?.productId}&purchasedProductId=${data?.purchasedProductId}`,
+      success_url: `https://level-2-24-assignment-9-server.vercel.app/api/purchaseProducts/success-payment?productId=${data?.productId}&purchasedProductId=${data?.purchasedProductId}`,
       fail_url: `https://level-2-24-assignment-6-server.vercel.app/api/payment/failed-payment`,
       cancel_url: `https://level-2-24-assignment-6-server.vercel.app/api/payment/failed-payment`,
       amount: data?.amount,

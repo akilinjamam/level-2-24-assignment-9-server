@@ -26,10 +26,15 @@ router.post(
 );
 
 router.post(
-  "/reset-password",
-  auth(),
+  "/sent-email",
   validateRequest(userSchema.createResetPasswordValidationSchema),
   userController.resetPasswordController
+);
+
+router.post(
+  "/reset-password",
+  validateRequest(userSchema.resetPasswordValidationSchema),
+  userController.recoveryPasswordController
 );
 
 export const userRouter = router;

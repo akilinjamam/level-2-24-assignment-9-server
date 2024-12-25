@@ -13,6 +13,7 @@ const createPurchasedProductSchema = zod_1.z.object({
         details: zod_1.z.string().min(1, "Product details are required"),
         userId: zod_1.z.string(),
         productId: zod_1.z.string(),
+        vendorId: zod_1.z.string(),
     }),
 });
 const createAddToCartProductSchema = zod_1.z.object({
@@ -26,6 +27,7 @@ const createAddToCartProductSchema = zod_1.z.object({
         details: zod_1.z.string().min(1, "Product details are required"),
         userId: zod_1.z.string(),
         productId: zod_1.z.string(),
+        vendorId: zod_1.z.string(),
     }),
 });
 exports.purchasedProductSchema = {

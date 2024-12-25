@@ -12,6 +12,7 @@ const createProductSchema = zod_1.z.object({
         details: zod_1.z.string().min(1, "Product details are required"),
         clicked: zod_1.z.number().nonnegative("Clicked count must be non-negative"),
         vendorId: zod_1.z.string(),
+        flashSale: zod_1.z.boolean(),
     }),
 });
 exports.productSchema = {

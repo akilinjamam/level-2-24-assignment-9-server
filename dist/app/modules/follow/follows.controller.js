@@ -26,7 +26,7 @@ const getFollowController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __
     res.status(201).json({
         success: true,
         status: 201,
-        message: result,
+        message: "Follows fetched successfully",
         data: result,
     });
 }));

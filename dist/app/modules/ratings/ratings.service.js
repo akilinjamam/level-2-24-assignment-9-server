@@ -13,9 +13,28 @@ exports.ratingService = void 0;
 const client_1 = require("@prisma/client");
 const prism = new client_1.PrismaClient();
 const createRating = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prism.rating.create({
-        data: data,
+    const findPurchseProduct = yield prism.rating.findFirst({
+        where: {
+            purchasedProductId: data.purchasedProductId,
+        },
     });
+    let result;
+    if (!findPurchseProduct) {
+        result = yield prism.rating.create({
+            data: data,
+        });
+    }
+    if (findPurchseProduct) {
+        const find = findPurchseProduct.ratingId;
+        result = yield prism.rating.update({
+            where: {
+                ratingId: find,
+            },
+            data: {
+                rating: data.rating,
+            },
+        });
+    }
     return result;
 });
 exports.ratingService = {

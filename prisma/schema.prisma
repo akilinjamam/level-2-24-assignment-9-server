@@ -75,23 +75,27 @@ model Follow {
 }
 
 model Rating {
-  ratingId  String   @id @default(uuid()) @db.Uuid
-  rating    Int
-  productId String   @db.Uuid
-  product   Products @relation(fields: [productId], references: [productId])
+  ratingId           String           @id @default(uuid()) @db.Uuid
+  rating             Int
+  productId          String           @db.Uuid
+  purchasedProductId String           @db.Uuid
+  userId             String
+  product            Products         @relation(fields: [productId], references: [productId])
+  purchasedProduct   PurchasedProduct @relation(fields: [purchasedProductId], references: [purchasedProductId])
 
   @@unique([productId])
   @@map("ratings")
 }
 
 model Review {
-  reviewId  String   @id @default(uuid()) @db.Uuid
-  review    String
-  productId String   @db.Uuid
-  product   Products @relation(fields: [productId], references: [productId])
-  Replay    Replay[]
+  reviewId           String           @id @default(uuid()) @db.Uuid
+  review             String
+  productId          String           @db.Uuid
+  purchasedProductId String           @db.Uuid
+  product            Products         @relation(fields: [productId], references: [productId])
+  purchasedProduct   PurchasedProduct @relation(fields: [purchasedProductId], references: [purchasedProductId])
+  Replay             Replay[]
 
-  @@unique([productId])
   @@map("reviews")
 }
 
@@ -101,12 +105,11 @@ model Replay {
   reviewId String @db.Uuid
   review   Review @relation(fields: [reviewId], references: [reviewId])
 
-  @@unique([reviewId])
   @@map("replays")
 }
 
 model PurchasedProduct {
-  purchasedProductId String  @id @default(uuid()) @db.Uuid
+  purchasedProductId String   @id @default(uuid()) @db.Uuid
   productName        String
   details            String
   quantity           Int
@@ -114,10 +117,13 @@ model PurchasedProduct {
   price              Int
   totalPrice         Int
   discount           Int
-  purchased          Boolean @default(false)
-  userId             String  @db.Uuid
+  purchased          Boolean  @default(false)
+  userId             String   @db.Uuid
   productId          String
-  user               User    @relation(fields: [userId], references: [userId])
+  vendorId           String   @default("123")
+  user               User     @relation(fields: [userId], references: [userId])
+  Rating             Rating[]
+  Review             Review[]
 
   @@map("purchaseProducts")
 }

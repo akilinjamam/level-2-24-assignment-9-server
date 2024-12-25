@@ -39,6 +39,12 @@ export const createResetPasswordValidationSchema = z.object({
     email: z.string(),
   }),
 });
+export const resetPasswordValidationSchema = z.object({
+  body: z.object({
+    email: z.string(),
+    password: z.string(),
+  }),
+});
 
 // Example usage
 export const userSchema = {
@@ -46,4 +52,5 @@ export const userSchema = {
   createUserLoginValidationSchema,
   createChangePasswordValidationSchema,
   createResetPasswordValidationSchema,
+  resetPasswordValidationSchema,
 };

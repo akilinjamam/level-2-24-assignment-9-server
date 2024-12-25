@@ -21,6 +21,16 @@ const createReviewController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) =>
         data: result,
     });
 }));
+const getReviewController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield reviews_service_1.reviewService.getReviews(req.body);
+    res.status(201).json({
+        success: true,
+        status: 201,
+        message: "reviews found successfully",
+        data: result,
+    });
+}));
 exports.reviewController = {
     createReviewController,
+    getReviewController,
 };

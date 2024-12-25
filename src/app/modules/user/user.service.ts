@@ -70,6 +70,18 @@ const changePassword = async (data: TChangePassword, getUser: DecodedToken) => {
     password: data.newPassword,
   };
 
+  const findUser = await prisma.user.findFirst({
+    where: {
+      email: getUser?.email,
+    },
+  });
+
+  const oldPassword = findUser?.password;
+
+  if (oldPassword !== data.oldPassword) {
+    throw new Error("old password did not matched");
+  }
+
   const result = await prisma.user.update({
     where: {
       email: getUser?.email as string,
@@ -80,11 +92,16 @@ const changePassword = async (data: TChangePassword, getUser: DecodedToken) => {
   return result;
 };
 
-const resetPassword = async (
-  data: TRecoveryPassword,
-  userInfo: DecodedToken
-) => {
-  const { iat, exp, ...remaining } = userInfo as any;
+const resetPassword = async (data: TRecoveryPassword) => {
+  const findUser = (await prisma.user.findFirst({
+    where: {
+      email: data.email,
+    },
+  })) as any;
+
+  console.log(data);
+
+  const { password, ...remaining } = findUser;
 
   const jwtPayload = remaining;
 
@@ -96,11 +113,24 @@ const resetPassword = async (
     "10m"
   );
 
-  const htmlUiLink = `https://level-2-24-assignment-9-client.vercel.app/recoveryPassword/user?token=${resetToken}`;
+  const htmlUiLink = `https://level-2-24-assignment-9-client.vercel.app/recoveryPassword?userToken=${resetToken}`;
 
   sendEmail(data.email, htmlUiLink);
 
   return data;
+};
+
+const recoverPassword = async (data: any) => {
+  const updatePassword = await prisma.user.update({
+    where: {
+      email: data.email,
+    },
+    data: {
+      password: data.password,
+    },
+  });
+
+  return updatePassword;
 };
 
 export const userService = {
@@ -108,4 +138,5 @@ export const userService = {
   createLogin,
   changePassword,
   resetPassword,
+  recoverPassword,
 };

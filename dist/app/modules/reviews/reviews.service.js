@@ -16,6 +16,15 @@ const createReviews = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma.review.create({ data: data });
     return result;
 });
+const getReviews = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma.review.findMany({
+        include: {
+            Replay: true,
+        },
+    });
+    return result;
+});
 exports.reviewService = {
     createReviews,
+    getReviews,
 };

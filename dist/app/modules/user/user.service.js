@@ -66,6 +66,15 @@ const changePassword = (data, getUser) => __awaiter(void 0, void 0, void 0, func
     const newData = {
         password: data.newPassword,
     };
+    const findUser = yield prisma.user.findFirst({
+        where: {
+            email: getUser === null || getUser === void 0 ? void 0 : getUser.email,
+        },
+    });
+    const oldPassword = findUser === null || findUser === void 0 ? void 0 : findUser.password;
+    if (oldPassword !== data.oldPassword) {
+        throw new Error("old password did not matched");
+    }
     const result = yield prisma.user.update({
         where: {
             email: getUser === null || getUser === void 0 ? void 0 : getUser.email,
@@ -74,18 +83,36 @@ const changePassword = (data, getUser) => __awaiter(void 0, void 0, void 0, func
     });
     return result;
 });
-const resetPassword = (data, userInfo) => __awaiter(void 0, void 0, void 0, function* () {
-    const _a = userInfo, { iat, exp } = _a, remaining = __rest(_a, ["iat", "exp"]);
+const resetPassword = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const findUser = (yield prisma.user.findFirst({
+        where: {
+            email: data.email,
+        },
+    }));
+    console.log(data);
+    const { password } = findUser, remaining = __rest(findUser, ["password"]);
     const jwtPayload = remaining;
     console.log(jwtPayload);
     const resetToken = (0, createToken_1.createToken)(jwtPayload, process.env.JWT_ACCESS_SECRET, "10m");
-    const htmlUiLink = `https://level-2-24-assignment-9-client.vercel.app/recoveryPassword/user?token=${resetToken}`;
+    const htmlUiLink = `https://level-2-24-assignment-9-client.vercel.app/recoveryPassword?userToken=${resetToken}`;
     (0, sendMail_1.sendEmail)(data.email, htmlUiLink);
     return data;
+});
+const recoverPassword = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const updatePassword = yield prisma.user.update({
+        where: {
+            email: data.email,
+        },
+        data: {
+            password: data.password,
+        },
+    });
+    return updatePassword;
 });
 exports.userService = {
     createUser,
     createLogin,
     changePassword,
     resetPassword,
+    recoverPassword,
 };

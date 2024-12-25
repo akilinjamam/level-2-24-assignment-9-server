@@ -20,7 +20,7 @@ const paymentInitialization = (data) => __awaiter(void 0, void 0, void 0, functi
         const result = yield axios_1.default.post(url, {
             store_id: "aamarpaytest",
             tran_id: data.tran_id,
-            success_url: `https://level-2-24-assignment-6-server.vercel.app/api/payment/confirm-payment?productId=${data === null || data === void 0 ? void 0 : data.productId}&purchasedProductId=${data === null || data === void 0 ? void 0 : data.purchasedProductId}`,
+            success_url: `https://level-2-24-assignment-9-server.vercel.app/api/purchaseProducts/success-payment?productId=${data === null || data === void 0 ? void 0 : data.productId}&purchasedProductId=${data === null || data === void 0 ? void 0 : data.purchasedProductId}`,
             fail_url: `https://level-2-24-assignment-6-server.vercel.app/api/payment/failed-payment`,
             cancel_url: `https://level-2-24-assignment-6-server.vercel.app/api/payment/failed-payment`,
             amount: data === null || data === void 0 ? void 0 : data.amount,

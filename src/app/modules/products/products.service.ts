@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { TProduct } from "./products.constant";
 import { prisma } from "../../../shared/prisma";
 
@@ -49,7 +49,11 @@ const getProductService = async (
     where: addFilterCondition,
     include: {
       vendor: true,
-      Review: true,
+      Review: {
+        include: {
+          Replay: true,
+        },
+      },
       Rating: true,
     },
   });
@@ -80,6 +84,23 @@ const getProductWithId = async (id: string) => {
     include: {
       Rating: true,
       vendor: true,
+      Review: {
+        include: {
+          Replay: true,
+        },
+      },
+    },
+  });
+  return result;
+};
+const getProductWithVendorId = async (id: string) => {
+  const result = await prisma.products.findFirst({
+    where: {
+      vendorId: id,
+    },
+    include: {
+      Rating: true,
+      vendor: true,
       Review: true,
     },
   });
@@ -97,6 +118,106 @@ const updateProduct = async (id: string, data: any) => {
   return result;
 };
 
+const updateImageProduct = async (
+  id: string,
+  image: string,
+  indexId: number
+) => {
+  const findImagesWithId = (await prisma.products.findUnique({
+    where: { productId: id },
+    select: { images: true },
+  })) as any;
+
+  const updatedImages = [...findImagesWithId?.images];
+  updatedImages[indexId] = image;
+
+  const result = await prisma.products.update({
+    where: {
+      productId: id,
+    },
+    data: {
+      images: updatedImages,
+    },
+  });
+
+  return result;
+};
+
+const deleteProduct = async (id: string) => {
+  const findProduct = await prisma.products.findFirst({
+    where: {
+      productId: id,
+    },
+    include: {
+      Review: true,
+      Rating: true,
+    },
+  });
+
+  const findPurchasedProductId = await prisma.purchasedProduct.findFirst({
+    where: {
+      productId: id,
+    },
+  });
+
+  const ratingIds = findProduct?.Rating?.map((rating) => rating.ratingId);
+  const reviewIds = findProduct?.Review?.map((rating) => rating.reviewId);
+  const purchasedProductId = findPurchasedProductId?.purchasedProductId;
+
+  try {
+    const result = await pirsma.$transaction(async (prix) => {
+      await prix.rating.deleteMany({
+        where: {
+          ratingId: { in: ratingIds },
+        },
+      });
+
+      await prix.replay.deleteMany({
+        where: {
+          reviewId: { in: reviewIds },
+        },
+      });
+
+      await prix.review.deleteMany({
+        where: {
+          reviewId: { in: reviewIds },
+        },
+      });
+
+      await prix.replay.deleteMany({
+        where: {
+          reviewId: { in: reviewIds },
+        },
+      });
+
+      await prix.replay.deleteMany({
+        where: {
+          reviewId: { in: reviewIds },
+        },
+      });
+      await prix.purchasedProduct.delete({
+        where: {
+          purchasedProductId: purchasedProductId,
+        },
+      });
+
+      const result = await prix.products.delete({
+        where: { productId: id },
+      });
+
+      return result;
+    });
+
+    console.log(result);
+
+    return result;
+  } catch (error) {
+    console.error("Transaction failed, rolled back:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
 export const productService = {
   createProductService,
   getProductService,
@@ -104,4 +225,7 @@ export const productService = {
   getProductWithFlashSale,
   getProductWithId,
   updateProduct,
+  updateImageProduct,
+  deleteProduct,
+  getProductWithVendorId,
 };

@@ -68,6 +68,16 @@ const getProductWithId = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awa
         data: result,
     });
 }));
+const getProductWithVendorId = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield products_service_1.productService.getProductWithVendorId(id);
+    res.status(200).json({
+        success: true,
+        status: 200,
+        message: "Product retrieved with vendor id successfully",
+        data: result,
+    });
+}));
 const updateProduct = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const result = yield products_service_1.productService.updateProduct(id, req === null || req === void 0 ? void 0 : req.body);
@@ -78,11 +88,38 @@ const updateProduct = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaite
         data: result,
     });
 }));
+const updateImgProduct = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const { id } = req.params;
+    const images = req === null || req === void 0 ? void 0 : req.files;
+    const image = (_a = images === null || images === void 0 ? void 0 : images.images[0]) === null || _a === void 0 ? void 0 : _a.path;
+    const { indexId } = req.body;
+    const result = yield products_service_1.productService.updateImageProduct(id, image, indexId);
+    res.status(200).json({
+        success: true,
+        status: 200,
+        message: "Product image updated with id successfully",
+        data: result,
+    });
+}));
+const deleteProduct = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield products_service_1.productService.deleteProduct(id);
+    res.status(200).json({
+        success: true,
+        status: 200,
+        message: "Product deleted successfully",
+        data: result,
+    });
+}));
 exports.productController = {
     createProduct,
     getProduct,
     getProductWithCategory,
     getProductWithFlashSale,
     getProductWithId,
+    getProductWithVendorId,
     updateProduct,
+    updateImgProduct,
+    deleteProduct,
 };

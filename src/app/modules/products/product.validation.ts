@@ -10,6 +10,7 @@ const createProductSchema = z.object({
     details: z.string().min(1, "Product details are required"),
     clicked: z.number().nonnegative("Clicked count must be non-negative"),
     vendorId: z.string(),
+    flashSale: z.boolean(),
   }),
 });
 

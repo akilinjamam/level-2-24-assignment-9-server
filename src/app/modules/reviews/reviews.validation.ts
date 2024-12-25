@@ -4,6 +4,7 @@ const reviewValidationSchema = z.object({
   body: z.object({
     review: z.string(),
     productId: z.string(),
+    purchasedProductId: z.string(),
   }),
 });
 

@@ -42,13 +42,21 @@ const changePasswordController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) 
     });
 }));
 const resetPasswordController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const getUser = req.user;
-    console.log(getUser);
-    const result = yield user_service_1.userService.resetPassword(req.body, getUser);
+    console.log("hello");
+    const result = yield user_service_1.userService.resetPassword(req.body);
     res.status(201).json({
         success: true,
         status: 201,
         message: "Password reset successfully done",
+        data: result,
+    });
+}));
+const recoveryPasswordController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_service_1.userService.recoverPassword(req.body);
+    res.status(201).json({
+        success: true,
+        status: 201,
+        message: "Password recovered successfully",
         data: result,
     });
 }));
@@ -57,4 +65,5 @@ exports.userController = {
     createUserLoginController,
     changePasswordController,
     resetPasswordController,
+    recoveryPasswordController,
 };

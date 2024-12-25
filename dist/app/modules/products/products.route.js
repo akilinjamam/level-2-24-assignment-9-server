@@ -19,5 +19,11 @@ router.get("/", products_controller_1.productController.getProduct);
 router.get("/get-with-category", products_controller_1.productController.getProductWithCategory);
 router.get("/get-with-flashSale", products_controller_1.productController.getProductWithFlashSale);
 router.get("/get-with-id/:id", products_controller_1.productController.getProductWithId);
+router.get("/get-with-vendor-id/:id", products_controller_1.productController.getProductWithVendorId);
 router.patch("/update-with-id/:id", products_controller_1.productController.updateProduct);
+router.delete("/delete-with-id/:id", products_controller_1.productController.deleteProduct);
+router.patch("/img-update/:id", sendImgToCloudinary_1.upload.fields([{ name: "images" }]), (req, _response, next) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+}, products_controller_1.productController.updateImgProduct);
 exports.productRouter = router;
