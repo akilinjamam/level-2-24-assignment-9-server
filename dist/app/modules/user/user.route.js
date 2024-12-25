@@ -15,4 +15,7 @@ router.post("/create-user-login", (0, validateRequest_1.validateRequest)(user_va
 router.post("/change-password", (0, auth_1.default)(), (0, validateRequest_1.validateRequest)(user_validation_1.userSchema.createChangePasswordValidationSchema), user_controller_1.userController.changePasswordController);
 router.post("/sent-email", (0, validateRequest_1.validateRequest)(user_validation_1.userSchema.createResetPasswordValidationSchema), user_controller_1.userController.resetPasswordController);
 router.post("/reset-password", (0, validateRequest_1.validateRequest)(user_validation_1.userSchema.resetPasswordValidationSchema), user_controller_1.userController.recoveryPasswordController);
+router.get("/", user_controller_1.userController.getAllUserController);
+router.delete("/delete-user/:id", user_controller_1.userController.deleteUserController);
+router.patch("/update-user/:id", user_controller_1.userController.updateUserController);
 exports.userRouter = router;

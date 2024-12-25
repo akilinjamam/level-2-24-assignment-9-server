@@ -137,6 +137,19 @@ const deleteCartWithId = async (id: string) => {
 import { UserType } from "@prisma/client";
 
 const getPurchasedHistory = async (id: string, userType: UserType) => {
+  if (userType === "ADMIN") {
+    const result = await prisma.purchasedProduct.findMany({
+      include: {
+        Review: {
+          include: {
+            Replay: true,
+          },
+        },
+      },
+    });
+
+    return result;
+  }
   if (userType === "VENDOR") {
     const findVendorId = await prisma.vendor.findFirst({
       where: {

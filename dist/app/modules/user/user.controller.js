@@ -60,10 +60,41 @@ const recoveryPasswordController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res
         data: result,
     });
 }));
+const updateUserController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_service_1.userService.updateUser(req.params.id, req.body);
+    res.status(201).json({
+        success: true,
+        status: 201,
+        message: "user updated successfully",
+        data: result,
+    });
+}));
+const getAllUserController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_service_1.userService.getAllUser();
+    res.status(201).json({
+        success: true,
+        status: 201,
+        message: "user retrieved successfully",
+        data: result,
+    });
+}));
+const deleteUserController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const result = yield user_service_1.userService.deletelUser((_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.id);
+    res.status(201).json({
+        success: true,
+        status: 201,
+        message: "user deleted successfully",
+        data: result,
+    });
+}));
 exports.userController = {
     createUserController,
     createUserLoginController,
     changePasswordController,
     resetPasswordController,
     recoveryPasswordController,
+    updateUserController,
+    getAllUserController,
+    deleteUserController,
 };

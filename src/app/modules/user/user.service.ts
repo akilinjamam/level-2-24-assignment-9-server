@@ -133,10 +133,164 @@ const recoverPassword = async (data: any) => {
   return updatePassword;
 };
 
+const updateUser = async (id: string, data: any) => {
+  const result = await prisma.user.update({
+    where: {
+      userId: id,
+    },
+    data,
+  });
+
+  return result;
+};
+const getAllUser = async () => {
+  const result = await prisma.user.findMany({});
+
+  return result;
+};
+
+const deletelUser = async (id: string) => {
+  try {
+    const result = await prisma.$transaction(async (prix) => {
+      const findPurchaseProducts = await prix.purchasedProduct.findMany({
+        where: {
+          userId: id,
+        },
+      });
+      const findRatingIds = await prix.rating.findMany({
+        where: {
+          userId: id,
+        },
+      });
+
+      const findFollowIds = await prix.follow.findMany({
+        where: {
+          userId: id,
+        },
+      });
+
+      const findReviewIds = await prix.review.findMany({
+        where: {
+          userId: id,
+        },
+      });
+      const findReplayIds = await prix.replay.findMany({
+        where: {
+          userId: id,
+        },
+      });
+
+      const findVendorIds = await prix.vendor.findMany({
+        where: {
+          userId: id,
+        },
+      });
+
+      const getPurchaseProductsIds = findPurchaseProducts?.map(
+        (item) => item?.purchasedProductId
+      );
+      const getRatingIds = findRatingIds?.map((item) => item?.ratingId);
+      const getFollowIds = findFollowIds?.map((item) => item?.followId);
+      const getReviewIds = findReviewIds?.map((item) => item?.reviewId);
+      const getReplayIds = findReplayIds?.map((item) => item?.replayId);
+      const getProductIds = findPurchaseProducts?.map(
+        (item) => item?.productId
+      );
+      const getVendorIds = findVendorIds?.map((item) => item?.vendorId);
+
+      if (getFollowIds?.length > 0) {
+        await prix.follow.deleteMany({
+          where: {
+            followId: { in: getFollowIds },
+          },
+        });
+      }
+
+      if (getRatingIds?.length > 0) {
+        await prix.rating.deleteMany({
+          where: {
+            ratingId: { in: getRatingIds },
+          },
+        });
+      }
+
+      if (getReplayIds?.length > 0) {
+        await prix.replay.deleteMany({
+          where: {
+            replayId: { in: getReplayIds },
+          },
+        });
+      }
+
+      if (getReviewIds?.length > 0) {
+        await prix.review.deleteMany({
+          where: {
+            reviewId: { in: getReviewIds },
+          },
+        });
+      }
+
+      if (getPurchaseProductsIds?.length > 0) {
+        await prix.purchasedProduct.deleteMany({
+          where: {
+            purchasedProductId: { in: getPurchaseProductsIds },
+          },
+        });
+      }
+      if (getPurchaseProductsIds?.length > 0) {
+        await prix.products.deleteMany({
+          where: {
+            productId: { in: getProductIds },
+          },
+        });
+      }
+
+      if (getVendorIds?.length > 0) {
+        await prix.vendor.deleteMany({
+          where: {
+            vendorId: { in: getVendorIds },
+          },
+        });
+      }
+
+      await prix.user.delete({
+        where: {
+          userId: id,
+        },
+      });
+
+      return {
+        purchasedProductIds: getPurchaseProductsIds,
+        getProductIds,
+        getRatingIds: getRatingIds,
+        getFolowIds: getFollowIds,
+        getReviewIds: getReviewIds,
+        getReplayIds,
+        getVendorIds,
+      };
+    });
+
+    return result;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await prisma.$disconnect();
+  }
+
+  // const result = await prisma.user.delete({
+  //   where: {
+  //     userId: id,
+  //   },
+  // });
+};
+
 export const userService = {
   createUser,
   createLogin,
   changePassword,
   resetPassword,
   recoverPassword,
+  updateUser,
+  getAllUser,
+  deletelUser,
 };

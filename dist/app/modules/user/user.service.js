@@ -109,10 +109,34 @@ const recoverPassword = (data) => __awaiter(void 0, void 0, void 0, function* ()
     });
     return updatePassword;
 });
+const updateUser = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma.user.update({
+        where: {
+            userId: id,
+        },
+        data,
+    });
+    return result;
+});
+const getAllUser = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma.user.findMany({});
+    return result;
+});
+const deletelUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma.user.delete({
+        where: {
+            userId: id,
+        },
+    });
+    return result;
+});
 exports.userService = {
     createUser,
     createLogin,
     changePassword,
     resetPassword,
     recoverPassword,
+    updateUser,
+    getAllUser,
+    deletelUser,
 };

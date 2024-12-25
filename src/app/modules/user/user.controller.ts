@@ -64,6 +64,38 @@ const recoveryPasswordController = tryCatchAsync(async (req, res) => {
     data: result,
   });
 });
+const updateUserController = tryCatchAsync(async (req, res) => {
+  const result = await userService.updateUser(req.params.id, req.body);
+
+  res.status(201).json({
+    success: true,
+    status: 201,
+    message: "user updated successfully",
+    data: result,
+  });
+});
+
+const getAllUserController = tryCatchAsync(async (req, res) => {
+  const result = await userService.getAllUser();
+
+  res.status(201).json({
+    success: true,
+    status: 201,
+    message: "user retrieved successfully",
+    data: result,
+  });
+});
+
+const deleteUserController = tryCatchAsync(async (req, res) => {
+  const result = await userService.deletelUser(req?.params?.id);
+
+  res.status(201).json({
+    success: true,
+    status: 201,
+    message: "user deleted successfully",
+    data: result,
+  });
+});
 
 export const userController = {
   createUserController,
@@ -71,4 +103,7 @@ export const userController = {
   changePasswordController,
   resetPasswordController,
   recoveryPasswordController,
+  updateUserController,
+  getAllUserController,
+  deleteUserController,
 };

@@ -36,5 +36,8 @@ router.post(
   validateRequest(userSchema.resetPasswordValidationSchema),
   userController.recoveryPasswordController
 );
+router.get("/", userController.getAllUserController);
+router.delete("/delete-user/:id", userController.deleteUserController);
+router.patch("/update-user/:id", userController.updateUserController);
 
 export const userRouter = router;

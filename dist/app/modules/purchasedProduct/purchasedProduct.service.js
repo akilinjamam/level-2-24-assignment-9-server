@@ -120,6 +120,18 @@ const deleteCartWithId = (id) => __awaiter(void 0, void 0, void 0, function* () 
     return result;
 });
 const getPurchasedHistory = (id, userType) => __awaiter(void 0, void 0, void 0, function* () {
+    if (userType === "ADMIN") {
+        const result = yield prisma.purchasedProduct.findMany({
+            include: {
+                Review: {
+                    include: {
+                        Replay: true,
+                    },
+                },
+            },
+        });
+        return result;
+    }
     if (userType === "VENDOR") {
         const findVendorId = yield prisma.vendor.findFirst({
             where: {

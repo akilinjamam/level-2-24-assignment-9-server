@@ -17,7 +17,7 @@ exports.createUserValidationSchema = zod_1.z.object({
             .email("Invalid email address.")
             .max(100, "Email should not exceed 100 characters."),
         phoneNumber: zod_1.z.string().max(11, "number not exceed 11 characters."),
-        userType: zod_1.z.enum(["USER", "VENDOR"]),
+        userType: zod_1.z.enum(["USER", "VENDOR", "ADMIN"]),
     }),
 });
 exports.createUserLoginValidationSchema = zod_1.z.object({

@@ -92,6 +92,7 @@ model Rating {
 model Review {
   reviewId           String           @id @default(uuid()) @db.Uuid
   review             String
+  userId             String
   productId          String           @db.Uuid
   purchasedProductId String           @db.Uuid
   product            Products         @relation(fields: [productId], references: [productId])
@@ -103,6 +104,7 @@ model Review {
 
 model Replay {
   replayId String @id @default(uuid()) @db.Uuid
+  userId   String
   replay   String
   reviewId String @db.Uuid
   review   Review @relation(fields: [reviewId], references: [reviewId])
