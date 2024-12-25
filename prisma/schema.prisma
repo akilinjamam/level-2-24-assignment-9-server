@@ -56,6 +56,8 @@ model User {
   phoneNumber      String
   address          String
   password         String             @default("1234")
+  suspend          Boolean            @default(false)
+  blacklist        Boolean            @default(false)
   userType         UserType
   follows          Follow[]
   purchasedProduct PurchasedProduct[]
