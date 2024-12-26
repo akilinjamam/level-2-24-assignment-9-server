@@ -4,6 +4,7 @@ type TReviews = {
   review: string;
   productId: string;
   purchasedProductId: string;
+  userId: string;
 };
 
 const prisma = new PrismaClient();

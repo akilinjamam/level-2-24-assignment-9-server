@@ -5,6 +5,7 @@ export type TUser = {
   phoneNumber: string;
   password: string;
   address: string;
+  suspend?: boolean;
   userType: "USER" | "VENDOR";
 };
 

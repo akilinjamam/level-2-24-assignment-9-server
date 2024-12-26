@@ -31,6 +31,9 @@ const createLogin = async (data: TLogin) => {
   if (!findUser) {
     throw new Error("user not found");
   }
+  if (findUser?.suspend) {
+    throw new Error("sorry you are suspended");
+  }
 
   console.log(findUser);
 
@@ -152,122 +155,71 @@ const getAllUser = async () => {
 const deletelUser = async (id: string) => {
   try {
     const result = await prisma.$transaction(async (prix) => {
-      const findPurchaseProducts = await prix.purchasedProduct.findMany({
-        where: {
-          userId: id,
-        },
-      });
-      const findRatingIds = await prix.rating.findMany({
+      const findUser = await prix.user.findFirst({
         where: {
           userId: id,
         },
       });
 
-      const findFollowIds = await prix.follow.findMany({
-        where: {
-          userId: id,
-        },
-      });
+      const userType = findUser?.userType;
 
-      const findReviewIds = await prix.review.findMany({
-        where: {
-          userId: id,
-        },
-      });
-      const findReplayIds = await prix.replay.findMany({
-        where: {
-          userId: id,
-        },
-      });
+      let suspend;
 
-      const findVendorIds = await prix.vendor.findMany({
-        where: {
-          userId: id,
-        },
-      });
-
-      const getPurchaseProductsIds = findPurchaseProducts?.map(
-        (item) => item?.purchasedProductId
-      );
-      const getRatingIds = findRatingIds?.map((item) => item?.ratingId);
-      const getFollowIds = findFollowIds?.map((item) => item?.followId);
-      const getReviewIds = findReviewIds?.map((item) => item?.reviewId);
-      const getReplayIds = findReplayIds?.map((item) => item?.replayId);
-      const getProductIds = findPurchaseProducts?.map(
-        (item) => item?.productId
-      );
-      const getVendorIds = findVendorIds?.map((item) => item?.vendorId);
-
-      if (getFollowIds?.length > 0) {
-        await prix.follow.deleteMany({
-          where: {
-            followId: { in: getFollowIds },
-          },
-        });
+      if (findUser?.suspend) {
+        suspend = false;
+      } else {
+        suspend = true;
       }
 
-      if (getRatingIds?.length > 0) {
-        await prix.rating.deleteMany({
+      console.log(suspend);
+
+      if (userType === "VENDOR") {
+        const findVendor = await prix.vendor.findFirst({
           where: {
-            ratingId: { in: getRatingIds },
+            userId: id,
           },
         });
-      }
+        const vendorId = findVendor?.vendorId;
 
-      if (getReplayIds?.length > 0) {
-        await prix.replay.deleteMany({
+        const findProducts = await prix.products.findMany({
           where: {
-            replayId: { in: getReplayIds },
+            vendorId: vendorId,
           },
         });
-      }
 
-      if (getReviewIds?.length > 0) {
-        await prix.review.deleteMany({
+        const productIds = findProducts?.map((item) => item?.productId);
+
+        await prix.products.updateMany({
           where: {
-            reviewId: { in: getReviewIds },
+            productId: { in: productIds },
+          },
+          data: { suspend: suspend },
+        });
+
+        const result = await prix.user.update({
+          where: {
+            userId: id,
+          },
+          data: {
+            suspend: suspend,
           },
         });
+
+        return result;
       }
 
-      if (getPurchaseProductsIds?.length > 0) {
-        await prix.purchasedProduct.deleteMany({
+      if (userType === "USER") {
+        const result = await prix.user.update({
           where: {
-            purchasedProductId: { in: getPurchaseProductsIds },
+            userId: id,
+          },
+          data: {
+            suspend: suspend,
           },
         });
-      }
-      if (getPurchaseProductsIds?.length > 0) {
-        await prix.products.deleteMany({
-          where: {
-            productId: { in: getProductIds },
-          },
-        });
-      }
 
-      if (getVendorIds?.length > 0) {
-        await prix.vendor.deleteMany({
-          where: {
-            vendorId: { in: getVendorIds },
-          },
-        });
+        return result;
       }
-
-      await prix.user.delete({
-        where: {
-          userId: id,
-        },
-      });
-
-      return {
-        purchasedProductIds: getPurchaseProductsIds,
-        getProductIds,
-        getRatingIds: getRatingIds,
-        getFolowIds: getFollowIds,
-        getReviewIds: getReviewIds,
-        getReplayIds,
-        getVendorIds,
-      };
     });
 
     return result;
@@ -276,12 +228,6 @@ const deletelUser = async (id: string) => {
   } finally {
     await prisma.$disconnect();
   }
-
-  // const result = await prisma.user.delete({
-  //   where: {
-  //     userId: id,
-  //   },
-  // });
 };
 
 export const userService = {

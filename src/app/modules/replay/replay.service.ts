@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 type TReply = {
   reviewId: string;
   replay: string;
+  userId: string;
 };
 
 const prisma = new PrismaClient();

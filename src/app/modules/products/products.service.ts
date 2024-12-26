@@ -46,7 +46,7 @@ const getProductService = async (
         followedCount: "desc",
       },
     },
-    where: addFilterCondition,
+    where: { ...addFilterCondition, suspend: false },
     include: {
       vendor: true,
       Review: {

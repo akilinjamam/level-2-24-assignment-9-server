@@ -5,6 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 // npx prisma migrate dev. this command to migrate prisma
+// rm -rf node_modules/.prisma
+//npx prisma generate
 
 generator client {
   provider = "prisma-client-js"
@@ -39,6 +41,7 @@ model Products {
   price       Int
   flashSale   Boolean  @default(false)
   details     String
+  suspend     Boolean  @default(false)
   clicked     Int
   images      String[]
   vendorId    String   @db.Uuid
@@ -121,6 +124,7 @@ model PurchasedProduct {
   price              Int
   totalPrice         Int
   discount           Int
+  suspend            Boolean  @default(false)
   purchased          Boolean  @default(false)
   userId             String   @db.Uuid
   productId          String
