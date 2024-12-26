@@ -112,12 +112,27 @@ const recoverPassword = (data) => __awaiter(void 0, void 0, void 0, function* ()
     });
     return updatePassword;
 });
-const updateUser = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUserBlacklist = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    let blacklist;
+    const findUser = yield prisma.user.findFirst({
+        where: {
+            userId: id,
+        },
+    });
+    const isBlacklisted = findUser === null || findUser === void 0 ? void 0 : findUser.blacklist;
+    if (isBlacklisted) {
+        blacklist = false;
+    }
+    else {
+        blacklist = true;
+    }
     const result = yield prisma.user.update({
         where: {
             userId: id,
         },
-        data,
+        data: {
+            blacklist: blacklist,
+        },
     });
     return result;
 });
@@ -198,7 +213,7 @@ exports.userService = {
     changePassword,
     resetPassword,
     recoverPassword,
-    updateUser,
+    updateUserBlacklist,
     getAllUser,
     deletelUser,
 };

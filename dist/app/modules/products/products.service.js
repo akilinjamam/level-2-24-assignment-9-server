@@ -161,27 +161,18 @@ const deleteProduct = (id) => __awaiter(void 0, void 0, void 0, function* () {
                     reviewId: { in: reviewIds },
                 },
             });
-            yield prix.replay.deleteMany({
-                where: {
-                    reviewId: { in: reviewIds },
-                },
-            });
-            yield prix.replay.deleteMany({
-                where: {
-                    reviewId: { in: reviewIds },
-                },
-            });
-            yield prix.purchasedProduct.delete({
-                where: {
-                    purchasedProductId: purchasedProductId,
-                },
-            });
+            if (purchasedProductId) {
+                yield prix.purchasedProduct.delete({
+                    where: {
+                        purchasedProductId: purchasedProductId,
+                    },
+                });
+            }
             const result = yield prix.products.delete({
                 where: { productId: id },
             });
             return result;
         }));
-        console.log(result);
         return result;
     }
     catch (error) {

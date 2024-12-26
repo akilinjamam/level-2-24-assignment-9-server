@@ -38,6 +38,6 @@ router.post(
 );
 router.get("/", userController.getAllUserController);
 router.delete("/delete-user/:id", userController.deleteUserController);
-router.patch("/update-user/:id", userController.updateUserController);
+router.patch("/update-user/:id", userController.updateUserBlacklistController);
 
 export const userRouter = router;

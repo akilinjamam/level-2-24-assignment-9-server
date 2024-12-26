@@ -17,5 +17,5 @@ router.post("/sent-email", (0, validateRequest_1.validateRequest)(user_validatio
 router.post("/reset-password", (0, validateRequest_1.validateRequest)(user_validation_1.userSchema.resetPasswordValidationSchema), user_controller_1.userController.recoveryPasswordController);
 router.get("/", user_controller_1.userController.getAllUserController);
 router.delete("/delete-user/:id", user_controller_1.userController.deleteUserController);
-router.patch("/update-user/:id", user_controller_1.userController.updateUserController);
+router.patch("/update-user/:id", user_controller_1.userController.updateUserBlacklistController);
 exports.userRouter = router;

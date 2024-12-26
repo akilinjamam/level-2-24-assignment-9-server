@@ -60,8 +60,8 @@ const recoveryPasswordController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res
         data: result,
     });
 }));
-const updateUserController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_service_1.userService.updateUser(req.params.id, req.body);
+const updateUserBlacklistController = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_service_1.userService.updateUserBlacklist(req.params.id);
     res.status(201).json({
         success: true,
         status: 201,
@@ -94,7 +94,7 @@ exports.userController = {
     changePasswordController,
     resetPasswordController,
     recoveryPasswordController,
-    updateUserController,
+    updateUserBlacklistController,
     getAllUserController,
     deleteUserController,
 };

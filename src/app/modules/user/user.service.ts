@@ -136,12 +136,30 @@ const recoverPassword = async (data: any) => {
   return updatePassword;
 };
 
-const updateUser = async (id: string, data: any) => {
+const updateUserBlacklist = async (id: string) => {
+  let blacklist;
+
+  const findUser = await prisma.user.findFirst({
+    where: {
+      userId: id,
+    },
+  });
+
+  const isBlacklisted = findUser?.blacklist;
+
+  if (isBlacklisted) {
+    blacklist = false;
+  } else {
+    blacklist = true;
+  }
+
   const result = await prisma.user.update({
     where: {
       userId: id,
     },
-    data,
+    data: {
+      blacklist: blacklist,
+    },
   });
 
   return result;
@@ -236,7 +254,7 @@ export const userService = {
   changePassword,
   resetPassword,
   recoverPassword,
-  updateUser,
+  updateUserBlacklist,
   getAllUser,
   deletelUser,
 };
