@@ -41,6 +41,9 @@ const createLogin = (data) => __awaiter(void 0, void 0, void 0, function* () {
     if (!findUser) {
         throw new Error("user not found");
     }
+    if (findUser === null || findUser === void 0 ? void 0 : findUser.suspend) {
+        throw new Error("sorry you are suspended");
+    }
     console.log(findUser);
     if ((findUser === null || findUser === void 0 ? void 0 : findUser.password) !== data.password) {
         throw new Error("password did not matched");
@@ -125,106 +128,60 @@ const getAllUser = () => __awaiter(void 0, void 0, void 0, function* () {
 const deletelUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield prisma.$transaction((prix) => __awaiter(void 0, void 0, void 0, function* () {
-            const findPurchaseProducts = yield prix.purchasedProduct.findMany({
+            const findUser = yield prix.user.findFirst({
                 where: {
                     userId: id,
                 },
             });
-            const findRatingIds = yield prix.rating.findMany({
-                where: {
-                    userId: id,
-                },
-            });
-            const findFollowIds = yield prix.follow.findMany({
-                where: {
-                    userId: id,
-                },
-            });
-            const findReviewIds = yield prix.review.findMany({
-                where: {
-                    userId: id,
-                },
-            });
-            const findReplayIds = yield prix.replay.findMany({
-                where: {
-                    userId: id,
-                },
-            });
-            const findVendorIds = yield prix.vendor.findMany({
-                where: {
-                    userId: id,
-                },
-            });
-            const getPurchaseProductsIds = findPurchaseProducts === null || findPurchaseProducts === void 0 ? void 0 : findPurchaseProducts.map((item) => item === null || item === void 0 ? void 0 : item.purchasedProductId);
-            const getRatingIds = findRatingIds === null || findRatingIds === void 0 ? void 0 : findRatingIds.map((item) => item === null || item === void 0 ? void 0 : item.ratingId);
-            const getFollowIds = findFollowIds === null || findFollowIds === void 0 ? void 0 : findFollowIds.map((item) => item === null || item === void 0 ? void 0 : item.followId);
-            const getReviewIds = findReviewIds === null || findReviewIds === void 0 ? void 0 : findReviewIds.map((item) => item === null || item === void 0 ? void 0 : item.reviewId);
-            const getReplayIds = findReplayIds === null || findReplayIds === void 0 ? void 0 : findReplayIds.map((item) => item === null || item === void 0 ? void 0 : item.replayId);
-            const getProductIds = findPurchaseProducts === null || findPurchaseProducts === void 0 ? void 0 : findPurchaseProducts.map((item) => item === null || item === void 0 ? void 0 : item.productId);
-            const getVendorIds = findVendorIds === null || findVendorIds === void 0 ? void 0 : findVendorIds.map((item) => item === null || item === void 0 ? void 0 : item.vendorId);
-            if ((getFollowIds === null || getFollowIds === void 0 ? void 0 : getFollowIds.length) > 0) {
-                yield prix.follow.deleteMany({
+            const userType = findUser === null || findUser === void 0 ? void 0 : findUser.userType;
+            let suspend;
+            if (findUser === null || findUser === void 0 ? void 0 : findUser.suspend) {
+                suspend = false;
+            }
+            else {
+                suspend = true;
+            }
+            console.log(suspend);
+            if (userType === "VENDOR") {
+                const findVendor = yield prix.vendor.findFirst({
                     where: {
-                        followId: { in: getFollowIds },
+                        userId: id,
                     },
                 });
-            }
-            if ((getRatingIds === null || getRatingIds === void 0 ? void 0 : getRatingIds.length) > 0) {
-                yield prix.rating.deleteMany({
+                const vendorId = findVendor === null || findVendor === void 0 ? void 0 : findVendor.vendorId;
+                const findProducts = yield prix.products.findMany({
                     where: {
-                        ratingId: { in: getRatingIds },
+                        vendorId: vendorId,
                     },
                 });
-            }
-            if ((getReplayIds === null || getReplayIds === void 0 ? void 0 : getReplayIds.length) > 0) {
-                yield prix.replay.deleteMany({
+                const productIds = findProducts === null || findProducts === void 0 ? void 0 : findProducts.map((item) => item === null || item === void 0 ? void 0 : item.productId);
+                yield prix.products.updateMany({
                     where: {
-                        replayId: { in: getReplayIds },
+                        productId: { in: productIds },
+                    },
+                    data: { suspend: suspend },
+                });
+                const result = yield prix.user.update({
+                    where: {
+                        userId: id,
+                    },
+                    data: {
+                        suspend: suspend,
                     },
                 });
+                return result;
             }
-            if ((getReviewIds === null || getReviewIds === void 0 ? void 0 : getReviewIds.length) > 0) {
-                yield prix.review.deleteMany({
+            if (userType === "USER") {
+                const result = yield prix.user.update({
                     where: {
-                        reviewId: { in: getReviewIds },
+                        userId: id,
+                    },
+                    data: {
+                        suspend: suspend,
                     },
                 });
+                return result;
             }
-            if ((getPurchaseProductsIds === null || getPurchaseProductsIds === void 0 ? void 0 : getPurchaseProductsIds.length) > 0) {
-                yield prix.purchasedProduct.deleteMany({
-                    where: {
-                        purchasedProductId: { in: getPurchaseProductsIds },
-                    },
-                });
-            }
-            if ((getPurchaseProductsIds === null || getPurchaseProductsIds === void 0 ? void 0 : getPurchaseProductsIds.length) > 0) {
-                yield prix.products.deleteMany({
-                    where: {
-                        productId: { in: getProductIds },
-                    },
-                });
-            }
-            if ((getVendorIds === null || getVendorIds === void 0 ? void 0 : getVendorIds.length) > 0) {
-                yield prix.vendor.deleteMany({
-                    where: {
-                        vendorId: { in: getVendorIds },
-                    },
-                });
-            }
-            yield prix.user.delete({
-                where: {
-                    userId: id,
-                },
-            });
-            return {
-                purchasedProductIds: getPurchaseProductsIds,
-                getProductIds,
-                getRatingIds: getRatingIds,
-                getFolowIds: getFollowIds,
-                getReviewIds: getReviewIds,
-                getReplayIds,
-                getVendorIds,
-            };
         }));
         return result;
     }
@@ -234,11 +191,6 @@ const deletelUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
     finally {
         yield prisma.$disconnect();
     }
-    // const result = await prisma.user.delete({
-    //   where: {
-    //     userId: id,
-    //   },
-    // });
 });
 exports.userService = {
     createUser,

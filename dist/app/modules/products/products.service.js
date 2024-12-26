@@ -42,7 +42,7 @@ const getProductService = (category, from, to) => __awaiter(void 0, void 0, void
                 followedCount: "desc",
             },
         },
-        where: addFilterCondition,
+        where: Object.assign(Object.assign({}, addFilterCondition), { suspend: false }),
         include: {
             vendor: true,
             Review: {

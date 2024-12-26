@@ -184,22 +184,13 @@ const deleteProduct = async (id: string) => {
         },
       });
 
-      await prix.replay.deleteMany({
-        where: {
-          reviewId: { in: reviewIds },
-        },
-      });
-
-      await prix.replay.deleteMany({
-        where: {
-          reviewId: { in: reviewIds },
-        },
-      });
-      await prix.purchasedProduct.delete({
-        where: {
-          purchasedProductId: purchasedProductId,
-        },
-      });
+      if (purchasedProductId) {
+        await prix.purchasedProduct.delete({
+          where: {
+            purchasedProductId: purchasedProductId,
+          },
+        });
+      }
 
       const result = await prix.products.delete({
         where: { productId: id },
@@ -207,8 +198,6 @@ const deleteProduct = async (id: string) => {
 
       return result;
     });
-
-    console.log(result);
 
     return result;
   } catch (error) {
