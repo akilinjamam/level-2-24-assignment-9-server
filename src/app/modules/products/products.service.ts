@@ -238,6 +238,15 @@ const deleteProduct = async (id: string) => {
   }
 };
 
+const getLastTenRecentVisitedProducts = async () => {
+  const result = await prisma.products.findMany({
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+  return result;
+};
+
 export const productService = {
   createProductService,
   getProductService,
@@ -249,4 +258,5 @@ export const productService = {
   deleteProduct,
   getProductWithVendorId,
   createMany,
+  getLastTenRecentVisitedProducts,
 };
