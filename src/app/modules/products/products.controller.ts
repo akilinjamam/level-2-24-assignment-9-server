@@ -25,6 +25,16 @@ const createProduct = tryCatchAsync(async (req, res) => {
     data: result,
   });
 });
+const createManyProduct = tryCatchAsync(async (req, res) => {
+  const result = await productService.createMany(req.body);
+
+  res.status(200).json({
+    success: true,
+    status: 200,
+    message: "Many Products created successfully",
+    data: result,
+  });
+});
 
 const getProduct = tryCatchAsync(async (req, res) => {
   const { category, from, to } = req.query;
@@ -39,7 +49,8 @@ const getProduct = tryCatchAsync(async (req, res) => {
     success: true,
     status: 200,
     message: "Product retrieved successfully",
-    data: result,
+    total: result?.totalData,
+    data: result?.result,
   });
 });
 
@@ -150,4 +161,5 @@ export const productController = {
   updateProduct,
   updateImgProduct,
   deleteProduct,
+  createManyProduct,
 };

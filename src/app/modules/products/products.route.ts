@@ -18,6 +18,7 @@ router.post(
   validateRequest(productSchema.createProductSchema),
   productController.createProduct
 );
+router.post("/create-many", productController.createManyProduct);
 router.get("/", productController.getProduct);
 router.get("/get-with-category", productController.getProductWithCategory);
 router.get("/get-with-flashSale", productController.getProductWithFlashSale);

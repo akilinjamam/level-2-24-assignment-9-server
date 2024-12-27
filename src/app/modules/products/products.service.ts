@@ -5,6 +5,24 @@ import { prisma } from "../../../shared/prisma";
 const pirsma = new PrismaClient();
 
 const createProductService = async (data: TProduct, images: string[]) => {
+  const findVendor = await prisma.vendor.findFirst({
+    where: {
+      vendorId: data.vendorId,
+    },
+  });
+
+  const getUserId = findVendor?.userId;
+
+  const getUser = await prisma.user.findFirst({
+    where: {
+      userId: getUserId,
+    },
+  });
+
+  if (getUser?.blacklist) {
+    throw new Error("sorry you are black listed. can not run operation");
+  }
+
   const newData = {
     ...data,
     images,
@@ -15,6 +33,14 @@ const createProductService = async (data: TProduct, images: string[]) => {
   const result = await prisma.products.create({
     data: newData,
   });
+  return result;
+};
+
+const createMany = async (data: any) => {
+  const result = await prisma.products.createMany({
+    data: data,
+  });
+
   return result;
 };
 
@@ -58,7 +84,12 @@ const getProductService = async (
     },
   });
 
-  return result;
+  const totalData = await prisma.products.count();
+
+  return {
+    totalData,
+    result,
+  };
 };
 
 const getProductWithCategory = async () => {
@@ -217,4 +248,5 @@ export const productService = {
   updateImageProduct,
   deleteProduct,
   getProductWithVendorId,
+  createMany,
 };

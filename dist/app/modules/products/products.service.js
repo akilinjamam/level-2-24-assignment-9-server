@@ -14,6 +14,20 @@ const client_1 = require("@prisma/client");
 const prisma_1 = require("../../../shared/prisma");
 const pirsma = new client_1.PrismaClient();
 const createProductService = (data, images) => __awaiter(void 0, void 0, void 0, function* () {
+    const findVendor = yield prisma_1.prisma.vendor.findFirst({
+        where: {
+            vendorId: data.vendorId,
+        },
+    });
+    const getUserId = findVendor === null || findVendor === void 0 ? void 0 : findVendor.userId;
+    const getUser = yield prisma_1.prisma.user.findFirst({
+        where: {
+            userId: getUserId,
+        },
+    });
+    if (getUser === null || getUser === void 0 ? void 0 : getUser.blacklist) {
+        throw new Error("sorry you are black listed. can not run operation");
+    }
     const newData = Object.assign(Object.assign({}, data), { images });
     console.log(newData);
     const result = yield prisma_1.prisma.products.create({
