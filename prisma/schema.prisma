@@ -48,8 +48,8 @@ model Products {
   vendor      Vendor   @relation(fields: [vendorId], references: [vendorId])
   Rating      Rating[]
   Review      Review[]
-  createdAt   DateTime @default(now()) @db.Timestamp(6)
-  updatedAt   DateTime @updatedAt @db.Timestamp(6)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("products")
 }

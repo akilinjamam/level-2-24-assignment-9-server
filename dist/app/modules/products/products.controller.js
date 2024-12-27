@@ -28,6 +28,15 @@ const createProduct = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaite
         data: result,
     });
 }));
+const createManyProduct = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield products_service_1.productService.createMany(req.body);
+    res.status(200).json({
+        success: true,
+        status: 200,
+        message: "Many Products created successfully",
+        data: result,
+    });
+}));
 const getProduct = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { category, from, to } = req.query;
     const result = yield products_service_1.productService.getProductService(category, from, to);
@@ -35,7 +44,8 @@ const getProduct = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(v
         success: true,
         status: 200,
         message: "Product retrieved successfully",
-        data: result,
+        total: result === null || result === void 0 ? void 0 : result.totalData,
+        data: result === null || result === void 0 ? void 0 : result.result,
     });
 }));
 const getProductWithCategory = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -122,4 +132,5 @@ exports.productController = {
     updateProduct,
     updateImgProduct,
     deleteProduct,
+    createManyProduct,
 };

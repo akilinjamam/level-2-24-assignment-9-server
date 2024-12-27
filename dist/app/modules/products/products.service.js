@@ -35,6 +35,12 @@ const createProductService = (data, images) => __awaiter(void 0, void 0, void 0,
     });
     return result;
 });
+const createMany = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.prisma.products.createMany({
+        data: data,
+    });
+    return result;
+});
 const getProductService = (category, from, to) => __awaiter(void 0, void 0, void 0, function* () {
     let addFilterCondition = {};
     if (category && !from && !to) {
@@ -67,7 +73,11 @@ const getProductService = (category, from, to) => __awaiter(void 0, void 0, void
             Rating: true,
         },
     });
-    return result;
+    const totalData = yield prisma_1.prisma.products.count();
+    return {
+        totalData,
+        result,
+    };
 });
 const getProductWithCategory = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.prisma.products.groupBy({
@@ -206,4 +216,5 @@ exports.productService = {
     updateImageProduct,
     deleteProduct,
     getProductWithVendorId,
+    createMany,
 };
