@@ -17,6 +17,7 @@ router.post("/create-product", (0, auth_1.default)(), sendImgToCloudinary_1.uplo
 }, (0, validateRequest_1.validateRequest)(product_validation_1.productSchema.createProductSchema), products_controller_1.productController.createProduct);
 router.post("/create-many", products_controller_1.productController.createManyProduct);
 router.get("/", products_controller_1.productController.getProduct);
+router.get("/get-last-recents", products_controller_1.productController.getLastTenRecentVisitedProducts);
 router.get("/get-with-category", products_controller_1.productController.getProductWithCategory);
 router.get("/get-with-flashSale", products_controller_1.productController.getProductWithFlashSale);
 router.get("/get-with-id/:id", products_controller_1.productController.getProductWithId);

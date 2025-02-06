@@ -48,6 +48,8 @@ model Products {
   vendor      Vendor   @relation(fields: [vendorId], references: [vendorId])
   Rating      Rating[]
   Review      Review[]
+  couponCode  String   @default("not-added")
+  couponValue Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

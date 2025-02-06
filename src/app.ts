@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: [
-      "level-2-24-assignment-9-client.vercel.app",
+      "https://level-2-24-assignment-9-client.vercel.app",
       "http://localhost:5173",
     ],
     credentials: true,

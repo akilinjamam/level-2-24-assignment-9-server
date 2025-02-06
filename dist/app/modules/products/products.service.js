@@ -206,6 +206,14 @@ const deleteProduct = (id) => __awaiter(void 0, void 0, void 0, function* () {
         yield prisma_1.prisma.$disconnect();
     }
 });
+const getLastTenRecentVisitedProducts = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.prisma.products.findMany({
+        orderBy: {
+            updatedAt: "desc",
+        },
+    });
+    return result;
+});
 exports.productService = {
     createProductService,
     getProductService,
@@ -217,4 +225,5 @@ exports.productService = {
     deleteProduct,
     getProductWithVendorId,
     createMany,
+    getLastTenRecentVisitedProducts,
 };

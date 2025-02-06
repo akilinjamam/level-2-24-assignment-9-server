@@ -122,6 +122,15 @@ const deleteProduct = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaite
         data: result,
     });
 }));
+const getLastTenRecentVisitedProducts = (0, tryCatchAsynce_1.tryCatchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield products_service_1.productService.getLastTenRecentVisitedProducts();
+    res.status(200).json({
+        success: true,
+        status: 200,
+        message: "recent product retrieved successfully",
+        data: result,
+    });
+}));
 exports.productController = {
     createProduct,
     getProduct,
@@ -133,4 +142,5 @@ exports.productController = {
     updateImgProduct,
     deleteProduct,
     createManyProduct,
+    getLastTenRecentVisitedProducts,
 };
